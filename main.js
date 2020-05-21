@@ -4,7 +4,10 @@ function setup()
 {
     createCanvas(windowWidth, windowHeight);
 
-    for(let x = 0; x < width; x++) 
+    width = int((displayWidth / wireLength) * 1.2);
+    height = int((displayHeight / wireLength) * 1.4);
+
+    for(let x = 0; x < width; x++)
     {
         wires[x] = [height];
         for(let y = 0; y < height; y++)
@@ -12,26 +15,32 @@ function setup()
             wires[x][y] = [new Wire(), new Wire()];
         }
     }
-
-    objects.push(new Font(10, 5, 0, -1));
-    objects.push(new Terra(10, 10, 0, 1))
 }
 
 function draw()
 {
     background(255);
     
-    mx = int(mouseX / wireLength);
-    my = int(mouseY / wireLength);
-    wmx = int(mouseX / wireLength + 0.5);
-    wmy = int(mouseY / wireLength + 0.5);
-    md = (mouseX % wireLength) < (mouseY % wireLength)? 0 : 1;
-    if ((mouseX % wireLength) + (mouseY % wireLength) > wireLength) {
-        if (md == 0) my ++;
-        else mx ++;
-        md = 1 - md;
+    push();
+    translate(taulellx, taulelly);
+    let tmouseX = mouseX - taulellx;
+    let tmouseY = mouseY - taulelly;
+    
+    mx = int(tmouseX / wireLength);
+    my = int(tmouseY / wireLength);
+    wmx = int(tmouseX / wireLength + 0.5);
+    wmy = int(tmouseY / wireLength + 0.5);
+    md = (tmouseX % wireLength) < (tmouseY % wireLength)? 1 : 0;
+    if ((tmouseX % wireLength) + (tmouseY % wireLength) > wireLength) {
+        if (md == 0) {
+            mx ++;
+            md = 1
+        }
+        else {
+            my ++;
+            md = 0;
+        }
     }
-
     for (let i = 0; i < 7; i++)
     {
         refreshWires();
@@ -40,12 +49,57 @@ function draw()
         
     }
 
-    drawWires();
+    drawTaulell();
     DrawObj();
+    drawWires();
     if(mouseIsPressed) DrawPreview();
+    pop();
 
-    if (button(windowWidth-110, 10, 100, 100))
-        print("SIO");
+
+    // temp GUI
+
+    let marge = 10;
+    let w = 80;
+    let h = 40;
+    let x = windowWidth - w - marge;
+    let y = marge;
+    
+    noStroke();
+    fill(220);
+    rect(x - marge, 0, w*2, windowHeight)
+
+    if (button(x, y, w, h))
+        penOri = -penOri;
+    fill(255);
+    strokeWeight(2);
+    text("girar", x + w / 2, y + h/2);
+    y += h + marge;
+
+    if (button(x, y, w, h, pen == "remove"))
+        pen = "remove";
+    fill(255);
+    strokeWeight(2);
+    text("goma", x + w / 2, y + h/2);
+    y += h + marge;
+    if (button(x, y, w, h, pen == "wire"))
+        pen = "wire";
+    fill(255);
+    strokeWeight(2);
+    text("cable", x + w / 2, y + h/2);
+    y += h + marge;
+
+    h = 80;
+    textSize(20);
+    textAlign(CENTER, CENTER);
+    ["font", "terra", "cilindre"].forEach(function(nom) {
+        if (button(x, y, w, h, pen == nom))
+            pen = nom;
+        fill(255);
+        strokeWeight(2);
+        text(nom, x + w / 2, y + h/2);
+        y += h + marge;
+    })
+    
     buttonsUpdate();
 }
 
@@ -59,10 +113,23 @@ function mouseReleased()
 {
     buttonsReleased();
 
+    if(mouseX    > windowWidth-100 || mouseButton != LEFT) return;
+    
     switch(pen)
     {
-    case "wire":
     case "remove":
+        if (wmx == wmxPress && wmy == wmyPress)
+        {
+            let len = objects.length;
+            for (let i = 0; i < len; i++) {
+                if (objects[i].del()){
+                    objects.splice(i, 1);
+                    break;
+                }
+            }
+            break;
+        }
+    case "wire":
         if (abs(wmx - wmxPress) > abs(wmy - wmyPress)) {
             for (let x = min(wmxPress, wmx); x < max(wmxPress, wmx); x++)
                 setWire(x, wmyPress, 0, pen == "wire");
@@ -73,10 +140,13 @@ function mouseReleased()
         }
         break;
     case "font":
-        addObject(new Font(mx, my, md == 1 || md == 2? 0 : 1, penOri));
+        addObject(new Font(mx, my, md, penOri));
         break;
     case "terra":
-        addObject(new Terra(mx, my, md == 1 || md == 2? 0 : 1, penOri));
+        addObject(new Terra(mx, my, md, penOri));
+        break;
+    case "cilindre":
+        addObject(new CilindreD(wmx, wmy));
         break;
     }
 }
@@ -110,6 +180,8 @@ function keyPressed()
 
 function DrawPreview()
 {
+    if(mouseX > windowWidth-100 || mouseButton != LEFT) return;
+
     switch(pen)
     {
     case "remove":
@@ -136,13 +208,32 @@ function DrawPreview()
 
         break;
     case 'font':
-        new Font(mx, my, md == 1 || md == 2? 0 : 1, penOri).draw();
+        new Font(mx, my, md, penOri).draw();
         break;
     case 'terra':
-        new Terra(mx, my, md == 1 || md == 2? 0 : 1, penOri).draw();
+        new Terra(mx, my, md, penOri).draw();
+        break;
+    case "cilindre":
+        new CilindreD(wmx, wmy).draw();
+    }
+}
+
+function mouseDragged()
+{
+    if (mouseButton == RIGHT)
+    {
+        taulellx = max(windowWidth -(width * wireLength + 100), min(0, taulellx + mouseX - pmouseX));
+        taulelly = max(windowHeight - height * wireLength, min(0, taulelly + mouseY - pmouseY));
     }
 }
 
 function windowResized() {
     resizeCanvas(windowWidth, windowHeight);
+    taulellx = max(windowWidth -(width * wireLength + 100), min(0, taulellx));
+    taulelly = max(windowHeight-(height-1) * wireLength, min(0, taulelly ));
+}
+
+
+document.oncontextmenu = function() {
+    return false;
 }

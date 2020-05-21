@@ -1,12 +1,12 @@
 var mouseIsReleased = false;
 
-function button(x, y, w, h)
+function button(x, y, w, h, active = false)
 {
     let over = false;
     let pressing = false;
     let released = false;
 
-    fill(220);
+    fill(175);
     noStroke();
 
     if (overRect(x, y, w, h)) 
@@ -16,10 +16,14 @@ function button(x, y, w, h)
         if (mouseIsPressed)
         {
             pressing = true;
-            fill(250);
+            fill(240);
         }
         if (mouseIsReleased)
             released = true;
+    }
+    else if (active)
+    {
+        stroke(50);
     }
 
     strokeWeight(1);

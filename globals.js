@@ -20,6 +20,9 @@ let md = 0;
 let wmxPress = 0;
 let wmyPress = 0;
 
+let taulellx = 0;
+let taulelly = 0;
+
 function getWire(x, y, d)
 {
     if (x < 0 || x >= width || y < 0 || y >= height) return new Wire();
@@ -45,7 +48,7 @@ function getPressio(x, y, d)
 
 function havePressio(p) // the condition that says what is 'presio'
 {
-    return p > 0.2;
+    return p > 1;
 }
 
 function setWire(x, y, d, a) // change wire.activate
@@ -144,7 +147,7 @@ function refreshPressio()
     }
 }
 
-function drawWires()
+function drawTaulell()
 {
     let taulellWidth = width * wireLength;
     let taulellHeight = height * wireLength;
@@ -157,6 +160,12 @@ function drawWires()
         strokeWeight(1);
         stroke(200, 240, 240);
         line(x*wireLength, 0, x*wireLength, taulellHeight);
+    }
+}
+
+function drawWires()
+{
+    for(x = 0; x < width; x++) {
         for(y = 0; y < height; y++) {
             getWire(x, y, 0).draw(x, y, 0);
             getWire(x, y, 1).draw(x, y, 1);
