@@ -1,3 +1,3 @@
-# simu
+# Simulador de pneumàtica
 
 Hola
