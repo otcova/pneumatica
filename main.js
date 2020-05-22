@@ -16,7 +16,7 @@ function setup()
         }
     }
     if (typeof window.orientation !== 'undefined') {
-        mobile = true;
+        print("Mobile");
         calcForFrame = 1;
     }
 }
@@ -44,17 +44,17 @@ function draw()
             md = 0;
         }
     }
-    for (let i = 0; i < (mobile)? 1 : 7; i++)
+    for (let i = 0; i < calcForFrame; i++)
     {
         refreshWires();
         UpdateBeforeObj();
         refreshPressio();
-        
+        UpdateAfterObj();
     }
 
     drawTaulell();
-    DrawObj();
     drawWires();
+    DrawObj();
     if(mouseIsPressed) DrawPreview();
     pop();
 
@@ -94,7 +94,7 @@ function draw()
     h = 80;
     textSize(20);
     textAlign(CENTER, CENTER);
-    ["font", "terra", "cilindre"].forEach(function(nom) {
+    ["font", "terra", "cilindre", "v 3/2"].forEach(function(nom) {
         if (button(x, y, w, h, pen == nom))
             pen = nom;
         fill(255);
@@ -151,33 +151,28 @@ function mouseReleased()
     case "cilindre":
         addObject(new CilindreD(wmx, wmy));
         break;
+    case "v 3/2":
+        addObject(new Valvula(wmx, wmy));
+        break;
     }
 }
 
 function keyPressed()
 {
-    print(int(key));
-    switch(key)
+    if (key == '1')
     {
-    case '1':
         penOri = -penOri;
-        break;
-    case '2':
-        pen = "remove";
-        break;
-    case '3':
-        pen = "wire";
-        break;
-    case '4':
-        pen = "font";
-        break;
-    case '5':
-        pen = "terra";
-        break;
-    case '6':
-        pen = "cilindre";
-        break;
-    }
+        return;
+    }        
+
+    ["remove", "wire", "font", "terra", "cilindre", "v 3/2"].forEach(function (nom, index)
+    {
+        if (key == "" + (2+index))
+        {
+            pen = nom;
+            return;
+        }
+    });
 }
 
 function DrawPreview()
@@ -189,10 +184,8 @@ function DrawPreview()
     case "remove":
     case "wire":
         if (pen == "remove") { 
-            if (wmx - wmxPress == 0 && my - wmyPress == 0)
-            {
+            if (wmx - wmxPress == 0 && wmy - wmyPress == 0) {
                 let objIndex = getObjectIn();
-
                 return;
             }
             stroke(250, 100, 100); 
@@ -217,6 +210,10 @@ function DrawPreview()
         break;
     case "cilindre":
         new CilindreD(wmx, wmy).draw();
+        break;
+    case "v 3/2":
+        new Valvula(wmx, wmy).draw();
+        break;
     }
 }
 

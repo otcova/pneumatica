@@ -12,6 +12,11 @@ class Terra
     {
         push();
 
+        if(this.d == 0)
+            drawObjWire(this.x+this.ori, this.y, this.d, this.ori);
+        else
+            drawObjWire(this.x, this.y+this.ori, this.d, this.ori);
+
         stroke(0, 190);
         fill(255);
         strokeWeight(1);
@@ -23,19 +28,12 @@ class Terra
                 wireLength*0.4, 0,
                 wireLength, wireLength/2.1,
                 wireLength, -wireLength/2.1);
-            stroke(0, 210);
-            strokeWeight(1);
-            line(wireLength, 0, wireLength*1.3, 0);
         }
         else {
             triangle(
                 wireLength*0.6, 0,
                 0, wireLength/2.1,
                 0, -wireLength/2.1);
-            
-            stroke(0, 210);
-            strokeWeight(1);
-            line(0, 0, -wireLength*0.3, 0);
         }
 
         pop();
@@ -51,6 +49,8 @@ class Terra
         }
     }
 
+    updateAfterPressio() {}
+    
     del()
     {
         return this.x == mx && this.y == my && this.d == md;

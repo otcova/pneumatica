@@ -49,3 +49,22 @@ class Wire
         return havePressio(this.pressio);
     }
 }
+
+function drawObjWire(x, y, d, ori)
+{
+    stroke(0, 230);
+    strokeWeight(1);
+    if (!getWire(x, y, d).active)
+    {
+        if (d == 0)
+            if (ori == 1)
+                line(x*wireLength+1, y*wireLength, (x+.3)*wireLength, y*wireLength);
+            else
+                line((x+1.)*wireLength-1, y*wireLength, (x+.7)*wireLength, y*wireLength);
+        else
+            if (ori == 1)
+                line(x*wireLength, y*wireLength, x*wireLength, (y+.3)*wireLength);
+            else
+                line(x*wireLength, (y+1.)*wireLength, x*wireLength, (y+.7)*wireLength);
+    }
+}

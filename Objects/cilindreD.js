@@ -11,19 +11,22 @@ class CilindreD
 
     draw()
     {
-        this.updateAfterPressio();
-
         push();
         
         let tx = this.x * wireLength;
         let ty = this.y * wireLength;
+
+        drawObjWire(this.x, this.y+2, 1, 1);
+        drawObjWire(this.x+5, this.y+2, 1, 1);
+
         translate(tx, ty);
         
         stroke(0, 200);
         strokeWeight(1);
         
-        line(0, 0, 0, wireLength*2.3);
-        line(wireLength * 5, 0, wireLength * 5, wireLength*2.3);
+        //line(0, 0, 0, wireLength*2.3);
+        //line(wireLength * 5, 0, wireLength * 5, wireLength*2.3);
+        
 
         stroke(0, 100);
         strokeWeight(1);
@@ -41,7 +44,6 @@ class CilindreD
         pop();
     }
     del() {
-        print(wmx, wmy, this.x, this.y);
         if (wmx >= this.x && wmx <= 5 + this.x && wmy >= this.y && wmy <= this.y + 2)
             return true;
         return false

@@ -23,9 +23,7 @@ let wmyPress = 0;
 let taulellx = 0;
 let taulelly = 0;
 
-let mobile = false;
-
-let calcForFrame = 7;
+let calcForFrame = 3;
 
 function getWire(x, y, d)
 {
@@ -52,7 +50,7 @@ function getPressio(x, y, d)
 
 function havePressio(p) // the condition that says what is 'presio'
 {
-    return p > 1;
+    return p > 0.999;
 }
 
 function setWire(x, y, d, a) // change wire.activate

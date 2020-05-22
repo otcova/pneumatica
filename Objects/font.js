@@ -11,6 +11,12 @@ class Font
     draw()
     {
         push();
+
+        if(this.d == 0)
+            drawObjWire(this.x+this.ori, this.y, this.d, this.ori);
+        else
+            drawObjWire(this.x, this.y+this.ori, this.d, this.ori);
+
         stroke(0, 150);
         fill(158);
         strokeWeight(1);
@@ -23,10 +29,7 @@ class Font
                 0, 0,
                 wireLength*0.8, wireLength/2.1,
                 wireLength*0.8, -wireLength/2.1);
-
-            stroke(0, 210);
-            strokeWeight(1);
-            line(0, 0, -wireLength*0.3, 0);
+                
         }
         else {
             triangle(
@@ -34,9 +37,7 @@ class Font
                 wireLength*0.2, wireLength/2.1,
                 wireLength*0.2, -wireLength/2.1);
             
-            stroke(0, 210);
-            strokeWeight(1);
-            line(wireLength, 0, wireLength*1.3, 0);
+            
         }
         pop();
     }
@@ -65,4 +66,6 @@ class Font
             else return [[this.x, this.y, 1], [this.x, this.y+1, 0], [this.x-1, this.y+1, 0]];
         }
     }
+
+    updateAfterPressio() {}
 }
