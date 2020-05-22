@@ -23,6 +23,10 @@ let wmyPress = 0;
 let taulellx = 0;
 let taulelly = 0;
 
+let mobile = false;
+
+let calcForFrame = 7;
+
 function getWire(x, y, d)
 {
     if (x < 0 || x >= width || y < 0 || y >= height) return new Wire();

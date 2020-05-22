@@ -4,8 +4,8 @@ function setup()
 {
     createCanvas(windowWidth, windowHeight);
 
-    width = int((displayWidth / wireLength) * 1.2);
-    height = int((displayHeight / wireLength) * 1.4);
+    width = int((displayWidth / wireLength) * 1.25);
+    height = int((displayHeight / wireLength) * 1.25);
 
     for(let x = 0; x < width; x++)
     {
@@ -15,12 +15,15 @@ function setup()
             wires[x][y] = [new Wire(), new Wire()];
         }
     }
+    if (typeof window.orientation !== 'undefined') {
+        mobile = true;
+        calcForFrame = 1;
+    }
 }
 
 function draw()
 {
     background(255);
-    
     push();
     translate(taulellx, taulelly);
     let tmouseX = mouseX - taulellx;
@@ -41,7 +44,7 @@ function draw()
             md = 0;
         }
     }
-    for (let i = 0; i < 7; i++)
+    for (let i = 0; i < (mobile)? 1 : 7; i++)
     {
         refreshWires();
         UpdateBeforeObj();
@@ -153,27 +156,26 @@ function mouseReleased()
 
 function keyPressed()
 {
+    print(int(key));
     switch(key)
     {
-    case 'w':
-    case 'W':
-        pen = "wire";
-        break;
-    case 'd':
-    case 'D':
-        pen = "remove";
-        break;
-    case 'f':
-    case 'F':
-        pen = "font";
-        break;
-    case 'r':
-    case 'R':
+    case '1':
         penOri = -penOri;
         break;
-    case 't':
-    case 'T':
+    case '2':
+        pen = "remove";
+        break;
+    case '3':
+        pen = "wire";
+        break;
+    case '4':
+        pen = "font";
+        break;
+    case '5':
         pen = "terra";
+        break;
+    case '6':
+        pen = "cilindre";
         break;
     }
 }

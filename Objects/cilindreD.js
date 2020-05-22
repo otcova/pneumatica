@@ -41,7 +41,10 @@ class CilindreD
         pop();
     }
     del() {
-        return false;
+        print(wmx, wmy, this.x, this.y);
+        if (wmx >= this.x && wmx <= 5 + this.x && wmy >= this.y && wmy <= this.y + 2)
+            return true;
+        return false
     }
 
     updateBeforePressio() {
