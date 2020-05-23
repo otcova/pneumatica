@@ -24,12 +24,14 @@ class Cilindre
         this.wireB.draw();
 
         drawTransforms(this.x, this.y, this.angle);
-
-        print(this.pressioA, this.pressioB);
+        
+        //fill(100 - this.pressioA * 50, 200, 200 - this.pressioA * 50);
+        colorPressio(this.pressioA);
         stroke(0, 150);
-        fill(100 - this.pressioA * 50, 200, 200 - this.pressioA * 50);
         rect(0, 0, 5 * this.pos, 2)
-        fill(100 - this.pressioB * 50, 200, 200 - this.pressioB * 50);
+        colorPressio(this.pressioB);
+        stroke(0, 150);
+        //fill(100 - this.pressioB * 50, 200, 200 - this.pressioB * 50);
         rect(5 * this.pos, 0, 5 * (1-this.pos), 2)
 
         translate(4 * this.pos, 0);

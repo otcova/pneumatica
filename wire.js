@@ -16,9 +16,8 @@ class Wire
     {
         if (this.active)
         {
-            if (this.havePressio) { stroke(100, 200, 100); strokeWeight(3); }
-            else { stroke(0); strokeWeight(1); }
-            
+            colorStrokePressio(this.pressio);
+
             if(d == 0)
                 line(x * wireLength, y * wireLength, 
                     x*wireLength+wireLength-1, y*wireLength);
@@ -41,10 +40,6 @@ class Wire
             }
         }
 
-    }
-
-    get havePressio() {
-        return havePressio(this.pressio);
     }
 }
 

@@ -41,12 +41,12 @@ class Valvula
         
         if (this.type == "pressio") 
         {
-            if(havePressio(this.pressioA)) { stroke(100, 200, 100); drawSetWeight(3); }
-            else { stroke(0, 230); drawSetWeight(1); }
+            colorPressio(this.pressioA);
+            drawSetWeight(2);
             line(-2, 1, 0, 1);
             
-            if(havePressio(this.pressioB)) { stroke(100, 200, 100); drawSetWeight(3); }
-            else { stroke(0, 230); drawSetWeight(1); }
+            colorPressio(this.pressioB)
+            drawSetWeight(2);
             line(3, 1, 0, 1);
         }
         else if (this.type == "lever") 

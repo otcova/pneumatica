@@ -53,9 +53,17 @@ function getPressio(x, y, d)
     return 0;
 }
 
-function havePressio(p) // the condition that says what is 'presio'
+function colorPressio(p) // the condition that says what is 'presio'
 {
-    return p > 0.999;
+    //stroke(p*50, p*100, p*50);
+    stroke(100 - p * 50, 200, 200 - p * 50);
+    fill(100 - p * 50, 200, 200 - p * 50);
+}
+
+function colorStrokePressio(p) // the condition that says what is 'presio'
+{
+    colorPressio(p); 
+    strokeWeight(2);
 }
 
 function setWire(x, y, d, a) // change wire.activate

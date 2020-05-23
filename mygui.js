@@ -91,7 +91,7 @@ function updateGUI()
     guiHeight = 65;
     textSize(20);
     textAlign(CENTER, CENTER);
-    ["font", "terra", "cilindre", "-valvules", "v reg", "v 3/2", "v 3/2 p"].forEach(function(nom) {
+    ["font", "terra", "cilindre", "-valvules", "v reg", "v 3/2", "v 3/2 p", "- exemlpes"].forEach(function(nom) {
         if (nom[0] == '-')
         {
             noStroke();
@@ -103,7 +103,6 @@ function updateGUI()
         }
         else
         {
-            
             if (button(x, y, guiWidth, guiHeight, pen == nom))
                 pen = nom;
             fill(255);
@@ -112,6 +111,31 @@ function updateGUI()
             y += guiHeight + guiMarge;
         }
     })
+    if (button(x, y, guiWidth, guiHeight))
+    {
+        addObject(new Cilindre(4, 3, 0));
+        addObject(new Valvula(9, 6, "pressio", 0));
+        addObject(new Valvula(4, 9, "lever", 0));
+        addObject(new ValvulaReg(13, 10, 0));
+        addObject(new Terra(5, 12, 0));
+        addObject(new Terra(10, 9, 0));
+        addObject(new Font(3, 13, 0));
+
+        AddWireLen(3, 13, 0, 10);
+        AddWireLen(9, 8, 1, 5);
+        setWire(5, 11, 1, true);
+        setWire(10, 8, 1, true);
+        setWire(9, 5, 1, true);
+        AddWireLen(4, 5, 1, 8);
+        AddWireLen(13, 7, 1, 6);
+        AddWireLen(4, 7, 0, 9);
+    }
+    if(frameCount % 30 == 0) print(wmx, wmy);
+    fill(255);
+    strokeWeight(2);
+    text(traduirNom("provisional"), x +guiWidth/ 2, y + guiHeight/2);
+    y += guiHeight + guiMarge;
+
     guiLength = y - guiYdelta;
     buttonsUpdate();
 }
@@ -127,4 +151,10 @@ function traduirNom(nom)
             return "3/2 palanca";
     }
     return nom;
+}
+
+function AddWireLen(x, y, d, wirelen)
+{
+    for (let i = 0; i < wirelen; i++)
+        setWire(x + (d == 0? i : 0), y + (d == 1? i : 0), d, true);
 }
