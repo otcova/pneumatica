@@ -40,7 +40,7 @@ function setPressio(x, y, d, p)
     {
         wire = getWire(x, y, d);
         if (wire.active) {
-            wire.pressio =p;//(p + wire.pressio)/2.;
+            wire.pressio = (p + wire.pressio)/2.;
         }
     }
 }
@@ -55,9 +55,8 @@ function getPressio(x, y, d)
 
 function colorPressio(p) // the condition that says what is 'presio'
 {
-    //stroke(p*50, p*100, p*50);
-    stroke(100 - p * 50, 200, 200 - p * 50);
-    fill(100 - p * 50, 200, 200 - p * 50);
+    stroke(100 - p*43, 100 + p*50, 200 - p*90);
+    fill(100 - p*43, 100 + p*50, 200 - p*90);
 }
 
 function colorStrokePressio(p) // the condition that says what is 'presio'

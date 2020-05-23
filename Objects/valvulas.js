@@ -7,11 +7,11 @@ class Valvula
         this.x = x;
         this.y = y;
         this.angle = angle;
-        this.pressioA = 0;
-        this.pressioB = this.type == "lever"? 1 : 0;
+        //this.pressio[3] = 0;
+        //this.pressio[4] = this.type == "lever"? 1 : 0;
         this.pos = this.type == "lever"? 1 : 0; // 0 - 1
 
-        this.pressio = [-1, -1, -1]; // Out0, In0, In1
+        this.pressio = [-1, -1, -1, this.type == "lever"? 0 : -1, 1]; // Out0, In0, In1
 
         this.wires = [];
 
@@ -30,7 +30,7 @@ class Valvula
     draw()
     {
         //Move
-        this.pos += (this.pressioB - this.pressioA) / 4.;
+        this.pos += (this.pressio[4] - this.pressio[3]) / 4.;
         this.pos = min(1, max(0, this.pos));
         
         for (let i = 0; i < this.wires.length; i++)
@@ -41,12 +41,24 @@ class Valvula
         
         if (this.type == "pressio") 
         {
-            colorPressio(this.pressioA);
-            drawSetWeight(2);
+            if (this.pressio[3] == -1) {
+                stroke(0, 230);
+                drawSetWeight(1);
+            }
+            else {
+                colorStrokePressio(this.pressio[3])
+                drawSetWeight(2);
+            }
             line(-2, 1, 0, 1);
             
-            colorPressio(this.pressioB)
-            drawSetWeight(2);
+            if (this.pressio[4] == -1) {
+                stroke(0, 230);
+                drawSetWeight(1);
+            }
+            else {
+                colorStrokePressio(this.pressio[4])
+                drawSetWeight(2);
+            }
             line(3, 1, 0, 1);
         }
         else if (this.type == "lever") 
@@ -56,16 +68,16 @@ class Valvula
 
             if (((wmx == this.dotPosALever[0] && wmy == this.dotPosALever[1]) || 
                 (wmx == this.dotPosBLever[0] && wmy == this.dotPosBLever[1])) && mouseIsReleased)
-                this.pressioA = 2 - this.pressioA;
+                this.pressio[3] = 2 - this.pressio[3];
 
             //interuptor
             beginShape();
-            vertex(this.pressioA < 1? -2.5 : -2.75, 0.7);
+            vertex(this.pressio[3] < 1? -2.5 : -2.75, 0.7);
             vertex(0, 0.7);
             vertex(0, 1.3);
-            vertex(this.pressioA < 1? -2.7 : -2.6, 1.3);
+            vertex(this.pressio[3] < 1? -2.7 : -2.6, 1.3);
             endShape();
-            if(this.pressioA < 1) {
+            if(this.pressio[3] < 1) {
                 line(-2.5, 0.7, -2.8, 1.55);
                 ellipse(-2.45, 0.55, 0.35, 0.35);
             }
@@ -116,11 +128,7 @@ class Valvula
     }
     updateAfterPressio()
     {
-        if (this.type == "pressio") {
-            this.pressioA = this.wires[3].pressio;
-            this.pressioB = this.wires[4].pressio;
-        }
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0; i < this.wires.length; i++) {
             if (!this.wires[i].active) this.pressio[i] = -1;
             else this.pressio[i] = this.wires[i].pressio;
         }
