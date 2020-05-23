@@ -39,8 +39,9 @@ function setPressio(x, y, d, p)
     if (p >= 0)
     {
         wire = getWire(x, y, d);
-        if (wire.active)
-            wire.pressio = (p + wire.pressio)/2.;
+        if (wire.active) {
+            wire.pressio =p;//(p + wire.pressio)/2.;
+        }
     }
 }
 

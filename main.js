@@ -210,8 +210,7 @@ function windowResized() {
 }
 
 function mouseWheel(event) {
-    guiYdelta = min(0, max(windowHeight - guiLength, guiYdelta + event.delta * .5));//min(0, max(windowHeight - guiLength, guiYdelta));
-    print(guiYdelta);
+    guiYdelta = min(0, max(windowHeight - guiLength, guiYdelta + event.delta * -.5));
 }
 
 document.oncontextmenu = function() {

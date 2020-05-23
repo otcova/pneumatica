@@ -16,6 +16,7 @@ class Cilindre
 
     draw()
     {
+        this.pos = min(1, max(0, this.pos + (this.pressioA - this.pressioB)/10));
 
         push();
         

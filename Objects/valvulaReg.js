@@ -32,11 +32,11 @@ class ValvulaReg
     }
     updateBeforePressio()
     {
-        setPressio(this.x+1, this.y, 0, this.pressio/2.);
+        this.wireB.setPressio(this.pressio / 2.);
     }
     updateAfterPressio() 
     {
-        this.pressio = getPressio(this.x-2, this.y, 0);
+        this.pressio = this.wireA.pressio;
     }
 
     espaiDots() {

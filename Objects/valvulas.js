@@ -11,13 +11,13 @@ class Valvula
         this.pressioB = this.type == "lever"? 1 : 0;
         this.pos = this.type == "lever"? 1 : 0; // 0 - 1
 
-        this.pressio = [0, 0, 0]; // Out0, In0, In1
+        this.pressio = [-1, -1, -1]; // Out0, In0, In1
 
-        this.wires = [3];
+        this.wires = [];
 
-        this.wires[0] = new ObjWire(angle, x, y, 0, 0, 3);  //Out0
-        this.wires[1] = new ObjWire(angle, x, y, 0, 2, 1);  //In0 
-        this.wires[2] = new ObjWire(angle, x, y, 1, 2, 1);  //In1 
+        this.wires.push(new ObjWire(angle, x, y, 0, 0, 3));  //Out0
+        this.wires.push(new ObjWire(angle, x, y, 0, 2, 1));  //In0 
+        this.wires.push(new ObjWire(angle, x, y, 1, 2, 1));  //In1 
         if (this.type == "pressio") {
             this.wires.push(new ObjWire(angle, x, y, -2, 1, 2));
             this.wires.push(new ObjWire(angle, x, y, 3, 1, 0));
@@ -102,14 +102,15 @@ class Valvula
             if (this.pos > 0.5) {
                 if (this.pressio[1] != -1) {
                     let p = (this.pressio[0] + this.pressio[1]) / 2.;
+                    
                     this.wires[0].setPressio(p);
                     this.wires[1].setPressio(p);
                 }
             }
             else if (this.pressio[2] != -1) {
                 let p = (this.pressio[0] + this.pressio[2]) / 2.;
-                this.wires[0].setPressio(this.x, this.y - 1, 1, p);
-                this.wires[2].setPressio(this.x + 1, this.y + 2, 1, p);
+                this.wires[0].setPressio(p);
+                this.wires[2].setPressio(p);
             }
         }
     }
@@ -119,7 +120,6 @@ class Valvula
             this.pressioA = this.wires[3].pressio;
             this.pressioB = this.wires[4].pressio;
         }
-
         for (let i = 0; i < 3; i++) {
             if (!this.wires[i].active) this.pressio[i] = -1;
             else this.pressio[i] = this.wires[i].pressio;
@@ -143,9 +143,11 @@ class Valvula
         return false
     }
     colitionLine(x, y, d) {
-        for (let i = 0; i < wireLength.length; i++)
-            if (this.wireA.equal(x, y, d))
+        for (let i = 0; i < this.wires.length; i++) {
+            if (this.wires[i].equal(x, y, d)){
                 return false;
-                return this.colitionDot(x, y) || this.colitionDot(x + (d == 0? 1 : 0), y + (d == 0? 0 : 1));
+            }
+        }
+        return this.colitionDot(x, y) || this.colitionDot(x + (d == 0? 1 : 0), y + (d == 0? 0 : 1));
     }
 }
