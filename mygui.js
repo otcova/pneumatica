@@ -130,7 +130,7 @@ function updateGUI()
         AddWireLen(13, 7, 1, 6);
         AddWireLen(4, 7, 0, 9);
     }
-    if(frameCount % 30 == 0) print(wmx, wmy);
+    //if(frameCount % 30 == 0) print(wmx, wmy);
     fill(255);
     strokeWeight(2);
     text(traduirNom("provisional"), x +guiWidth/ 2, y + guiHeight/2);
