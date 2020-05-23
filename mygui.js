@@ -91,7 +91,7 @@ function updateGUI()
     guiHeight = 65;
     textSize(20);
     textAlign(CENTER, CENTER);
-    ["font", "terra", "cilindre", "-valvules", "v reg", "v 3/2", "v 3/2 p", "- exemlpes"].forEach(function(nom) {
+    ["font", "terra", "cilindre", "-valvules", "v reg", "v 3/2", "v 3/2 p", "- provisional"].forEach(function(nom) {
         if (nom[0] == '-')
         {
             noStroke();
@@ -133,7 +133,7 @@ function updateGUI()
     //if(frameCount % 30 == 0) print(wmx, wmy);
     fill(255);
     strokeWeight(2);
-    text(traduirNom("provisional"), x +guiWidth/ 2, y + guiHeight/2);
+    text(traduirNom("test"), x +guiWidth/ 2, y + guiHeight/2);
     y += guiHeight + guiMarge;
 
     guiLength = y - guiYdelta;
