@@ -1,70 +1,45 @@
 class Terra
 {
-    constructor(x, y, d, oriantacio, insert = true) // ori => -1 / 1
+    constructor(x, y, angle) // ori => -1 / 1
     {
         this.x = x;
         this.y = y;
-        this.d = d;
-        this.ori = oriantacio;
+        this.angle = angle;
+        this.wire = new ObjWire(angle, x, y, 0, 0, 3);
     }
 
     draw()
     {
+        this.wire.draw();
+        
         push();
+        drawTransforms(this.x, this.y, this.angle);
 
-        if(this.d == 0)
-            drawObjWire(this.x+this.ori, this.y, this.d, this.ori);
-        else
-            drawObjWire(this.x, this.y+this.ori, this.d, this.ori);
-
-        stroke(0, 190);
+        stroke(0, 230);
         fill(255);
-        strokeWeight(1);
-        translate(this.x * wireLength, this.y * wireLength);
-        if (this.d == 1) rotate(HALF_PI);
-
-        if (this.ori == 1) {
-            triangle(
-                wireLength*0.4, 0,
-                wireLength, wireLength/2.1,
-                wireLength, -wireLength/2.1);
-        }
-        else {
-            triangle(
-                wireLength*0.6, 0,
-                0, wireLength/2.1,
-                0, -wireLength/2.1);
-        }
-
+        triangle(0, 0.5,
+                -0.5, 0,
+                0.5, 0);
         pop();
     }
 
-    updateBeforePressio()
-    {
-        if (this.d == 0) {
-            setPressio(this.x + this.ori, this.y, 0, 0);
-        }
-        else {
-            setPressio(this.x, this.y + this.ori, 1, 0);
-        }
+    updateBeforePressio() {
+        this.wire.setPressio(0);
     }
-
     updateAfterPressio() {}
-    
-    del()
-    {
-        return this.x == mx && this.y == my && this.d == md;
-    }
 
-    espai()
+    espaiDots()
     {
-        if (this.ori == -1) {
-            if (this.d == 0) return [[this.x, this.y, 0], [this.x, this.y, 1], [this.x, this.y-1, 1]];
-            else return [[this.x, this.y, 1], [this.x, this.y, 0], [this.x-1, this.y, 0]];
-        }
-        else {
-            if (this.d == 0) return [[this.x, this.y, 0], [this.x+1, this.y, 1], [this.x+1, this.y-1, 1]];
-            else return [[this.x, this.y, 1], [this.x, this.y+1, 0], [this.x-1, this.y+1, 0]];
-        }
+        return [[this.x, this.y]]
+    }
+    colitionDot(x, y) {
+        if (x == this.x && y == this.y)
+            return true;
+        return false;
+    }
+    colitionLine(x, y, d) {
+        if (this.wire.equal(x, y, d))
+            return false;
+        return this.colitionDot(x, y) || this.colitionDot(x + (d == 0? 1 : 0), y + (d == 0? 0 : 1));
     }
 }

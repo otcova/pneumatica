@@ -1,6 +1,7 @@
 
 let pen = "wire"; // wire, remove, font, terra
 let penOri = 1;
+let penAngle = 0;
 
 let width = 50;
 let height = 30;
@@ -35,9 +36,12 @@ function getWire(x, y, d)
 
 function setPressio(x, y, d, p)
 {
-    wire = getWire(x, y, d);
-    if (wire.active)
-        wire.pressio = (p + wire.pressio)/2.;
+    if (p >= 0)
+    {
+        wire = getWire(x, y, d);
+        if (wire.active)
+            wire.pressio = (p + wire.pressio)/2.;
+    }
 }
 
 function getPressio(x, y, d)
@@ -176,6 +180,25 @@ function drawWires()
 }
 
 
+function rotateDots(angle, cx, cy, x, y)
+{
+    let mem;
+    for(let i = 0; i < angle; i++) {
+        mem = x;
+        x = -y;
+        y = mem;
+    }
+
+    return [x + cx, y + cy];
+}
+
+function orbitDots(angle, cx, cy, x, y)
+{
+    if (angle == 3) angle = 1;
+    else if (angle == 1) angle = 3;
+    return rotateDots(angle, cx, cy, x - cx, y - cy);
+}
+
 // - fn for Objects -
 
 
@@ -205,10 +228,20 @@ function getObjectIn(x, y, d)
     let n = 0;
     let len = objects.length;
     for (let i = 0; i < len; i++) {
-        llista = objects[i].espai();
-        for (n = 0; n < llista.length; n++)
-            if (llista[n][0] == x && llista[n][1] == y && llista[n][2] == d)
-                return i;
+        if (objects[i].colitionLine(x, y, d))
+            return i;
+    }
+
+    return -1;
+}
+
+function getObjectInDot(x, y)
+{
+    let n = 0;
+    let len = objects.length;
+    for (let i = 0; i < len; i++) {
+        if (objects[i].colitionDot(x, y, d))
+            return i;
     }
 
     return -1;
@@ -216,9 +249,70 @@ function getObjectIn(x, y, d)
 
 function addObject(obj)
 {
-    llista = obj.espai();
-    for (n = 0; n < llista.length; n++)
-        if (getWire(llista[n][0], llista[n][1], llista[n][2]).active)
+    llista = obj.espaiDots();
+    for (let n = 0; n < llista.length; n++) {
+        for (let d = 0; d < 2; d++)
+            if (getWire(llista[n][0], llista[n][1], d).active)
+                if (obj.colitionLine(llista[n][0], llista[n][1], d))
+                    return;
+        if (getWire(llista[n][0]-1, llista[n][1], 0).active)
+                if (obj.colitionLine(llista[n][0]-1, llista[n][1], 0))
+                    return;
+        if (getWire(llista[n][0], llista[n][1]-1, 1).active)
+                if (obj.colitionLine(llista[n][0], llista[n][1]-1, 1))
+                    return;
+        if (getObjectInDot(llista[n][0], llista[n][1]) != -1)
             return;
+    }
     objects.push(obj);
+}
+
+
+//////// Draw functions -- utils
+
+
+function drawTransforms(x, y, angle)
+{
+    scale(wireLength);
+    translate(x, y);
+    strokeWeight(1. / wireLength);
+    rotate(angle * HALF_PI);
+}
+function drawSetWeight(x)
+{
+    strokeWeight(x / wireLength);
+}
+
+function drawTope(x, y)
+{
+    let top = y - 0.3;
+    line(x, y, x, top);
+    line(x - 0.2, top, x + 0.2, top);
+}
+function drawArrow(ax, ay, bx, by)
+{
+    push();
+    
+    stroke(0);
+    line(ax, ay, bx, by);
+    noStroke(0);
+    fill(100);
+    translate(bx, by);
+    rotate(atan2(by - ay, bx - ax));
+    scale(0.15);
+    triangle(0, 0, -2, 1, -2, -1);
+    
+    pop();
+}
+
+function drawMotlla(len, pos, motllax, motllaAlt, motllaBaix)
+{
+    let deltaMotllax= (pos*len + .2)/(len*1.5);
+    for(let i = 0; i < len*1.5; i++)
+    {
+        line(motllax, motllaBaix, motllax-deltaMotllax, motllaAlt);
+        motllax -= deltaMotllax
+        line(motllax, motllaAlt, motllax-deltaMotllax, motllaBaix);
+        motllax -= deltaMotllax
+    }
 }

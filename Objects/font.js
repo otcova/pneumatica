@@ -1,71 +1,48 @@
 class Font
 {
-    constructor(x, y, d, oriantacio) // ori => -1 / 1
+    constructor(x, y, angle) // ori => -1 / 1
     {
         this.x = x;
         this.y = y;
-        this.d = d;
-        this.ori = oriantacio;
+        this.angle = angle;
+        this.wire = new ObjWire(angle, x, y, 0, 0, 0);
     }
 
     draw()
     {
-        push();
-
-        if(this.d == 0)
-            drawObjWire(this.x+this.ori, this.y, this.d, this.ori);
-        else
-            drawObjWire(this.x, this.y+this.ori, this.d, this.ori);
-
-        stroke(0, 150);
-        fill(158);
-        strokeWeight(1);
-        translate(this.x * wireLength, this.y * wireLength);
+        this.wire.draw();
         
-        if (this.d == 1) rotate(HALF_PI);
+        push();
+        drawTransforms(this.x, this.y, this.angle);
 
-        if (this.ori == -1) {
-            triangle(
-                0, 0,
-                wireLength*0.8, wireLength/2.1,
-                wireLength*0.8, -wireLength/2.1);
-                
-        }
-        else {
-            triangle(
-                wireLength, 0,
-                wireLength*0.2, wireLength/2.1,
-                wireLength*0.2, -wireLength/2.1);
-            
-            
-        }
+        stroke(0, 230);
+        fill(255);
+        triangle(-0.26, 0,
+                -1.1, 0.5,
+                -1.1, -0.5);
+        
+        ellipse(-0.1, 0, 0.33, 0.33);
         pop();
     }
-    del()
-    {
-        return this.x == mx && this.y == my && this.d == md;
-    }
-    updateBeforePressio()
-    {
-        if (this.d == 0) {
-            setPressio(this.x + this.ori, this.y, 0, 2);
-        }
-        else {
-            setPressio(this.x, this.y + this.ori, 1, 2);
-        }
-    }
 
-    espai()
-    {
-        if (this.ori == -1) {
-            if (this.d == 0) return [[this.x, this.y, 0], [this.x, this.y, 1], [this.x, this.y-1, 1]];
-            else return [[this.x, this.y, 1], [this.x, this.y, 0], [this.x-1, this.y, 0]];
-        }
-        else {
-            if (this.d == 0) return [[this.x, this.y, 0], [this.x+1, this.y, 1], [this.x+1, this.y-1, 1]];
-            else return [[this.x, this.y, 1], [this.x, this.y+1, 0], [this.x-1, this.y+1, 0]];
-        }
+    updateBeforePressio() {
+        this.wire.setPressio(2);
     }
-
     updateAfterPressio() {}
+
+    espaiDots()
+    {
+        return [rotateDots(this.angle, this.x, this.y, 0, 0), rotateDots(this.angle, this.x, this.y, -1, 0)]
+    }
+    colitionDot(x, y) {
+        [x, y] = orbitDots(this.angle, this.x, this.y, x, y);
+        if ((x == this.x && y == this.y) || (x == this.x-1 && y == this.y))
+            return true;
+        return false;
+    }
+    colitionLine(x, y, d) {
+        if (this.wire.equal(x, y, d))
+            return false;
+        return this.colitionDot(x, y) || this.colitionDot(x + (d == 0? 1 : 0), y + (d == 0? 0 : 1));
+    }
 }

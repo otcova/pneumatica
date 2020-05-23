@@ -68,3 +68,58 @@ function drawObjWire(x, y, d, ori)
                 line(x*wireLength, (y+1.)*wireLength, x*wireLength, (y+.7)*wireLength);
     }
 }
+
+
+class ObjWire
+{
+    constructor(angle, cx, cy, x, y, wangle) // angle => 0 / 1 / 2 / 3 (numero de rotacions de 90º)
+    {
+        let mem;
+        for(let i = 0; i < angle; i++) {
+            mem = x;
+            x = -y;
+            y = mem;
+            d = 1-d;
+        }
+        wangle = (wangle + angle) % 4;        
+        this.x = x + cx + (wangle == 2? -1 : 0);
+        this.y = y + cy + (wangle == 3? -1 : 0);
+        this.d = wangle % 2;
+        this.ori = wangle > 1? 0 : 1;
+    }
+
+    draw()
+    {
+        stroke(0, 230);
+        strokeWeight(1);
+        if (!getWire(this.x, this.y, this.d).active)
+        {
+            if (this.d == 0)
+                if (this.ori == 1)
+                    line(this.x*wireLength+1, this.y*wireLength, (this.x+.3)*wireLength, this.y*wireLength);
+                else
+                    line((this.x+1.)*wireLength-1, this.y*wireLength, (this.x+.7)*wireLength, this.y*wireLength);
+            else
+                if (this.ori == 1)
+                    line(this.x*wireLength, this.y*wireLength, this.x*wireLength, (this.y+.3)*wireLength);
+                else
+                    line(this.x*wireLength, (this.y+1.)*wireLength, this.x*wireLength, (this.y+.7)*wireLength);
+        }
+    }
+
+    setPressio(p)
+    {
+        setPressio(this.x, this.y, this.d, p);
+    }
+
+    equal(x, y, d) {
+        return this.x == x && this.y == y && this.d == d;
+    }
+
+    get active() {
+        return getWire(this.x, this.y, this.d).active;
+    }
+    get pressio() {
+        return getPressio(this.x, this.y, this.d);
+    }
+}

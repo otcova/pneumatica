@@ -1,106 +1,151 @@
 class Valvula
 {
-    constructor(x, y) // ori => -1 / 1
+    constructor(x, y, type, angle) // type = "pressio" / "lever"
     {
+        this.type = type;
+        
         this.x = x;
         this.y = y;
+        this.angle = angle;
         this.pressioA = 0;
-        this.pressioB = 0;
-        this.pos = 0; // 0 - 1
+        this.pressioB = this.type == "lever"? 1 : 0;
+        this.pos = this.type == "lever"? 1 : 0; // 0 - 1
 
-        this.pressioIn0 = 0;
-        this.pressioIn1 = 0;
+        this.pressio = [0, 0, 0]; // Out0, In0, In1
+
+        this.wires = [3];
+
+        this.wires[0] = new ObjWire(angle, x, y, 0, 0, 3);  //Out0
+        this.wires[1] = new ObjWire(angle, x, y, 0, 2, 1);  //In0 
+        this.wires[2] = new ObjWire(angle, x, y, 1, 2, 1);  //In1 
+        if (this.type == "pressio") {
+            this.wires.push(new ObjWire(angle, x, y, -2, 1, 2));
+            this.wires.push(new ObjWire(angle, x, y, 3, 1, 0));
+        }
+
+        this.dotPosALever = rotateDots(angle, x, y, -2, 1);
+        this.dotPosBLever = rotateDots(angle, x, y, -3, 1);
     }
 
     draw()
     {
         //Move
-        this.pos += (this.pressioB - this.pressioA) / 2.;
+        this.pos += (this.pressioB - this.pressioA) / 4.;
         this.pos = min(1, max(0, this.pos));
         
-        drawObjWire(this.x, this.y-1, 1, -1);
-        drawObjWire(this.x, this.y+2, 1, 1);
-        drawObjWire(this.x+1, this.y+2, 1, 1);
+        for (let i = 0; i < this.wires.length; i++)
+            this.wires[i].draw();
 
-        drawObjWire(this.x-3, this.y+1, 0, -1);
-        drawObjWire(this.x+3, this.y+1, 0, 1);
-        
         push();
-        strokeWeight(1);
-        translate(this.x*wireLength, this.y*wireLength);
+        drawTransforms(this.x, this.y, this.angle);
         
-        if(havePressio(this.pressioA)) { stroke(100, 200, 100); strokeWeight(3); }
-        else { stroke(0, 230); strokeWeight(1); }
-        line(wireLength*-2, wireLength, 0, wireLength);
-        if(havePressio(this.pressioB)) { stroke(100, 200, 100); strokeWeight(3); }
-        else { stroke(0, 230); strokeWeight(1); }
-        line(wireLength*3, wireLength, 0, wireLength);
-        
-        strokeWeight(1);
+        if (this.type == "pressio") 
+        {
+            if(havePressio(this.pressioA)) { stroke(100, 200, 100); drawSetWeight(3); }
+            else { stroke(0, 230); drawSetWeight(1); }
+            line(-2, 1, 0, 1);
+            
+            if(havePressio(this.pressioB)) { stroke(100, 200, 100); drawSetWeight(3); }
+            else { stroke(0, 230); drawSetWeight(1); }
+            line(3, 1, 0, 1);
+        }
+        else if (this.type == "lever") 
+        {
+            fill(255);
+            stroke(0, 200);
+
+            if (((wmx == this.dotPosALever[0] && wmy == this.dotPosALever[1]) || 
+                (wmx == this.dotPosBLever[0] && wmy == this.dotPosBLever[1])) && mouseIsReleased)
+                this.pressioA = 2 - this.pressioA;
+
+            //interuptor
+            beginShape();
+            vertex(this.pressioA < 1? -2.5 : -2.75, 0.7);
+            vertex(0, 0.7);
+            vertex(0, 1.3);
+            vertex(this.pressioA < 1? -2.7 : -2.6, 1.3);
+            endShape();
+            if(this.pressioA < 1) {
+                line(-2.5, 0.7, -2.8, 1.55);
+                ellipse(-2.45, 0.55, 0.35, 0.35);
+            }
+            else {
+                line(-2.8, 0.7, -2.5, 1.55);
+                ellipse(-2.85, 0.58, 0.35, 0.35);
+            }
+
+            drawMotlla(2, this.pos, 3.4,  0.5,  1.5);
+        }
+
+        drawSetWeight(1);
         stroke(0, 200);
         fill(255);
-        translate(this.pos*-2*wireLength, 0);
-        rect(-0.2*wireLength, 0, 3.4*wireLength, 2*wireLength);
+        translate(this.pos*-2, 0);
+        rect(-0.2, 0, 3.4, 2);
 
         ////
 
-        this.drawTope(0, 2*wireLength);
-        this.drawTope(3*wireLength, 2*wireLength);
-        //line(0, 0, wireLength, 2*wireLength);
-        line(1.5*wireLength, 0, 1.5*wireLength, 2*wireLength);
+        drawTope(0, 2);
+        drawTope(3, 2);
+        line(1.5, 0, 1.5, 2);
         
-        this.drawArrow(wireLength, 2*wireLength, 0, 0);
-        this.drawArrow(2*wireLength, 2*wireLength, 2*wireLength, 0);
+        drawArrow(1, 2, 0, 0);
+        drawArrow(2, 2, 2, 0);
 
         pop();
-    }
-
-    drawTope(x, y)
-    {
-        let top = y - wireLength * 0.3;
-        line(x, y, x, top);
-        line(x - wireLength * 0.2, top, x + wireLength * 0.2, top);
-    }
-    drawArrow(ax, ay, bx, by)
-    {
-        push();
-        
-        stroke(0);
-        line(ax, ay, bx, by);
-        noStroke(0);
-        fill(100);
-        translate(bx, by);
-        rotate(atan2(by - ay, bx - ax));
-        scale(wireLength*0.15);
-        triangle(0, 0, -2, 1, -2, -1);
-        
-        pop();
-    }
-
-    del() {
-        if (wmx >= this.x && wmx <= 3 + this.x && wmy >= this.y && wmy <= this.y + 2)
-            return true;
-        return false
     }
 
     updateBeforePressio() 
     {
-        if (this.pos > 0.5)
-            setPressio(this.x, this.y - 1, 1, this.pressioIn0);
-        else
-            setPressio(this.x, this.y - 1, 1, this.pressioIn1);
+        if (this.pressio[0] != -1)
+        {
+            if (this.pos > 0.5) {
+                if (this.pressio[1] != -1) {
+                    let p = (this.pressio[0] + this.pressio[1]) / 2.;
+                    this.wires[0].setPressio(p);
+                    this.wires[1].setPressio(p);
+                }
+            }
+            else if (this.pressio[2] != -1) {
+                let p = (this.pressio[0] + this.pressio[2]) / 2.;
+                this.wires[0].setPressio(this.x, this.y - 1, 1, p);
+                this.wires[2].setPressio(this.x + 1, this.y + 2, 1, p);
+            }
+        }
     }
     updateAfterPressio()
     {
-        this.pressioA = getPressio(this.x-3, this.y + 1, 0);
-        this.pressioB = getPressio(this.x + 3, this.y + 1, 0);
+        if (this.type == "pressio") {
+            this.pressioA = this.wires[3].pressio;
+            this.pressioB = this.wires[4].pressio;
+        }
 
-        this.pressioIn0 = getPressio(this.x, this.y + 2, 1);
-        this.pressioIn1 = getPressio(this.x + 1, this.y + 2, 1);
+        for (let i = 0; i < 3; i++) {
+            if (!this.wires[i].active) this.pressio[i] = -1;
+            else this.pressio[i] = this.wires[i].pressio;
+        }
     }
 
-    espai()
-    {
-        return [[this.x-2, this.y+1, 0], [this.x-1, this.y+1, 0], [this.x, this.y+1, 0],  [this.x+1, this.y+1, 0],  [this.x+2, this.y+1, 0]];
+    espaiDots() {
+        let dots = [6*3];
+        let counter = 0;
+        for (let x = -2; x < 4; x++)
+            for (let y = 0; y < 3; y++) {
+                dots[counter] = rotateDots(this.angle, this.x, this.y, x, y);
+                counter++;
+            }
+        return dots;
+    }
+    colitionDot(x, y) {
+        [x, y] = orbitDots(this.angle, this.x, this.y, x, y);
+        if (x > -3+this.x && x < 4+this.x && y >= 0+this.y && y < 3+this.y)
+            return true;
+        return false
+    }
+    colitionLine(x, y, d) {
+        for (let i = 0; i < wireLength.length; i++)
+            if (this.wireA.equal(x, y, d))
+                return false;
+                return this.colitionDot(x, y) || this.colitionDot(x + (d == 0? 1 : 0), y + (d == 0? 0 : 1));
     }
 }
