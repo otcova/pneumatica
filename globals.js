@@ -1,7 +1,7 @@
 
 let pen = "wire"; // wire, remove, font, terra
 let penOri = 1;
-let penAngle = 0;
+let penAngle = { "font":0, "terra":0, "cilindre":0, "v reg":0, "v 3/2":0, "v 3/2 p":0 };
 
 let width = 50;
 let height = 30;
@@ -278,7 +278,6 @@ function addObject(obj)
 
 //////// Draw functions -- utils
 
-
 function drawTransforms(x, y, angle)
 {
     scale(wireLength);
@@ -325,8 +324,11 @@ function drawMotlla(len, pos, motllax, motllaAlt, motllaBaix)
     }
 }
 
-function createObject(nom, p1 = wmx, p2 = wmy, p3 = penAngle, p4)
+function createObject(nom, p1 = wmx, p2 = wmy, p3, p4)
 {
+    if (p3 == undefined) 
+        p3 = penAngle[nom];
+
     switch(nom)
     {
     case 'font':

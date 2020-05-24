@@ -106,21 +106,23 @@ function mouseReleased()
 
 function keyPressed()
 {
-
-    if (key == 'q' || key == 'Q')
+    if (penAngle[pen] != undefined)
     {
-        penAngle += 1;
-        if (penAngle > 3) penAngle = 0;
-        return;
-    }        
-    else if (key == 'w' || key == 'W')
-    {
-        penAngle -= 1;
-        if (penAngle < 0) penAngle = 3;
-        return;
+        if (key == 'q' || key == 'Q')
+        {
+            penAngle[pen] += 1;
+            if (penAngle[pen] > 3) penAngle[pen] = 0;
+            return;
+        }        
+        else if (key == 'w' || key == 'W')
+        {
+            penAngle[pen] -= 1;
+            if (penAngle[pen] < 0) penAngle[pen] = 3;
+            return;
+        }
     }
-
-    ["remove", "wire", "font", "terra", "cilindre", "v reg", "v 3/2", "v 3/2 p"].forEach(function (nom, index)
+    
+   ["remove", "wire", "font", "terra", "cilindre", "v reg", "v 3/2", "v 3/2 p"].forEach(function (nom, index)
     {
         if (key == "" + (1+index))
         {

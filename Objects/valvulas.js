@@ -17,23 +17,21 @@ class Valvula
         {
             this.wires = [];
 
-            this.wires.push(new ObjWire(angle, x, y, 0, 0, 3));  //Out0
-            this.wires.push(new ObjWire(angle, x, y, 0, 2, 1));  //In0 
-            this.wires.push(new ObjWire(angle, x, y, 1, 2, 1));  //In1 
+            this.wires.push(new ObjWire(angle, x, y, 0, -1, 3));  //Out0
+            this.wires.push(new ObjWire(angle, x, y, 0, 1, 1));  //In0 
+            this.wires.push(new ObjWire(angle, x, y, 1, 1, 1));  //In1 
             if (this.type == "pressio") {
-                this.wires.push(new ObjWire(angle, x, y, -2, 1, 2));
-                this.wires.push(new ObjWire(angle, x, y, 3, 1, 0));
+                this.wires.push(new ObjWire(angle, x, y, -2, 0, 2));
+                this.wires.push(new ObjWire(angle, x, y, 3, 0, 0));
             }
         }
         else
         {
             this.iconSize = iconSize / 2.2;
-            this.y -= 1 * this.iconSize;
-            if (this.type == "pressio") this.x -= 0.5 * this.iconSize;
         }
 
-        this.dotPosALever = rotateDots(angle, x, y, -2, 1);
-        this.dotPosBLever = rotateDots(angle, x, y, -3, 1);
+        this.dotPosALever = rotateDots(angle, x, y, -2, 0);
+        this.dotPosBLever = rotateDots(angle, x, y, -3, 0);
     }
 
     draw()
@@ -65,7 +63,7 @@ class Valvula
                 colorStrokePressio(this.pressio[3])
                 drawSetWeight(2);
             }
-            line(-2, 1, 0, 1);
+            line(-2, 0, 0, 0);
             
             if (this.pressio[4] == -1) {
                 stroke(0, 230);
@@ -75,7 +73,7 @@ class Valvula
                 colorStrokePressio(this.pressio[4])
                 drawSetWeight(2);
             }
-            line(3, 1, 0, 1);
+            line(3, 0, 0, 0);
         }
         else if (this.type == "lever") 
         {
@@ -88,37 +86,37 @@ class Valvula
 
             //interuptor
             beginShape();
-            vertex(this.pressio[3] < 1? -2.5 : -2.75, 0.7);
-            vertex(0, 0.7);
-            vertex(0, 1.3);
-            vertex(this.pressio[3] < 1? -2.7 : -2.6, 1.3);
+            vertex(this.pressio[3] < 1? -2.5 : -2.75, -.3);
+            vertex(0, -.3);
+            vertex(0, .3);
+            vertex(this.pressio[3] < 1? -2.7 : -2.6, .3);
             endShape();
             if(this.pressio[3] < 1) {
-                line(-2.5, 0.7, -2.8, 1.55);
-                ellipse(-2.45, 0.55, 0.35, 0.35);
+                line(-2.5, -0.3, -2.8, .55);
+                ellipse(-2.45, -0.45, 0.35, .35);
             }
             else {
-                line(-2.8, 0.7, -2.5, 1.55);
-                ellipse(-2.85, 0.58, 0.35, 0.35);
+                line(-2.8, -0.3, -2.5, .55);
+                ellipse(-2.85, -0.42, 0.35, 0.35);
             }
 
-            drawMotlla(2, this.pos, 3.4,  0.5,  1.5);
+            drawMotlla(2, this.pos, 3.4,  -.5,  .5);
         }
 
         drawSetWeight(1);
         stroke(0, 200);
         fill(255);
         translate(this.pos*-2, 0);
-        rect(-0.2, 0, 3.4, 2);
+        rect(-0.2, -1, 3.4, 2);
 
         ////
 
-        drawTope(0, 2);
-        drawTope(3, 2);
-        line(1.5, 0, 1.5, 2);
+        drawTope(0, 1);
+        drawTope(3, 1);
+        line(1.5, -1, 1.5, 1);
         
-        drawArrow(0, 0, 1, 2);
-        drawArrow(2, 2, 2, 0);
+        drawArrow(0, -1, 1, 1);
+        drawArrow(2, 1, 2, -1);
 
         pop();
     }
@@ -154,7 +152,7 @@ class Valvula
         let dots = [6*3];
         let counter = 0;
         for (let x = -2; x < 4; x++)
-            for (let y = 0; y < 3; y++) {
+            for (let y = -1; y < 2; y++) {
                 dots[counter] = rotateDots(this.angle, this.x, this.y, x, y);
                 counter++;
             }
@@ -162,7 +160,7 @@ class Valvula
     }
     colitionDot(x, y) {
         [x, y] = orbitDots(this.angle, this.x, this.y, x, y);
-        if (x > -3+this.x && x < 4+this.x && y >= 0+this.y && y < 3+this.y)
+        if (x > -3+this.x && x < 4+this.x && y >= -1+this.y && y < 2+this.y)
             return true;
         return false
     }

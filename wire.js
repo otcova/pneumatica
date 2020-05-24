@@ -65,6 +65,13 @@ function drawObjWire(x, y, d, ori)
 
 class ObjWire
 {
+    static auto(obj, x, y)
+    {
+        let objw = new ObjWire(obj.angle, obj.x, obj.y, x, y, 0);
+        objw.x += obj.deltaX;
+        objw.x += obj.deltaY;
+        return objw;
+    }
     constructor(angle, cx, cy, x, y, wangle) // angle => 0 / 1 / 2 / 3 (numero de rotacions de 90º)
     {
         let mem;

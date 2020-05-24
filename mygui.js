@@ -3,7 +3,7 @@ var mouseIsReleased = false;
 let guiYdelta = 0;
 let guiMarge = 13;
 let guiWidth = 120;
-let guiHeight = 70;
+let guiHeight = 60;
 let guiTextHeight = guiHeight/2;
 let guiLavelHeight = 30;
 let guiTotalWidth = guiMarge*2 + guiWidth;
@@ -69,10 +69,10 @@ function updateGUI()
     noStroke();
     fill(210);
     rect(x - guiMarge, 0, guiWidth *2, windowHeight)
-
-    if (button(x, y, guiWidth, guiTextHeight)){
-        penAngle += 1;
-        if (penAngle > 3) penAngle = 0
+    
+    if (button(x, y, guiWidth, guiTextHeight) && penAngle[pen] != undefined){
+        penAngle[pen] += 1;
+        if (penAngle[pen] > 3) penAngle[pen] = 0
     }
     fill(255);
     strokeWeight(2);
@@ -107,11 +107,14 @@ function updateGUI()
         }
         else
         {
-            if (button(x, y, guiWidth, guiHeight, pen == nom))
+            let extraH = (pen == nom)? (guiWidth - guiHeight) : 0;
+            if (button(x, y, guiWidth, guiHeight+extraH, pen == nom))
                 pen = nom;
+            
             if (guiButtonOver || pen == nom)
             {
-                createObject(nom, (x+guiWidth/ 2) / wireLength, (y + guiHeight/2) / wireLength, 0, 1).draw();                
+                createObject(nom, (x+guiWidth/ 2) / wireLength, (y + (guiHeight+extraH)/2) / wireLength, 
+                            extraH == 0? 0 : penAngle[nom], 1).draw();
             }
             else
             {
@@ -119,14 +122,21 @@ function updateGUI()
                 strokeWeight(2);
                 text(traduirNom(nom), x +guiWidth/ 2, y + guiHeight/2);
             }
-            y += guiHeight + guiMarge;
+            y += (guiHeight+extraH) + guiMarge;
         }
     })
     if (button(x, y, guiWidth, guiHeight))
     {
-        addObject(new Cilindre(6, 4, 0));
-        addObject(new Valvula(9, 6, "pressio", 0));
-        addObject(new Valvula(4, 9, "lever", 0));
+        objects = [];
+        for(let x = 0; x < 15; x++) {
+            for(let y = 0; y < 15; y++) {
+                wires[x][y][0] = new Wire();
+                wires[x][y][1] = new Wire();
+            }
+        }
+        addObject(new Cilindre(7, 4, 0));
+        addObject(new Valvula(9, 7, "pressio", 0));
+        addObject(new Valvula(4, 10, "lever", 0));
         addObject(new ValvulaReg(13, 10, 0));
         addObject(new Terra(5, 12, 0));
         addObject(new Terra(10, 9, 0));

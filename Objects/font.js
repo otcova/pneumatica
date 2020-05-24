@@ -7,10 +7,8 @@ class Font
         this.angle = angle;
         
         if (iconSize == undefined) this.wire = new ObjWire(angle, x, y, 0, 0, 0);
-        else {
-            this.iconSize = iconSize;
-            this.x += .8 * this.iconSize;
-        }
+        else this.iconSize = iconSize;
+        
     }
 
     draw()
@@ -19,7 +17,11 @@ class Font
         
         push();
         drawTransforms(this.x, this.y, this.angle);
-        if (this.iconSize != undefined) scale(this.iconSize);
+        if (this.iconSize != undefined) 
+        {
+            scale(this.iconSize);
+            translate(.5, 0);
+        }
 
         stroke(0, 230);
         fill(255);
