@@ -9,9 +9,9 @@ class Valvula
         this.angle = angle;
         //this.pressio[3] = 0;
         //this.pressio[4] = this.type == "lever"? 1 : 0;
-        this.pos = this.type == "lever"? 1 : 0; // 0 - 1
+        this.pos = type == "lever"? 1 : 0; // 0 - 1
 
-        this.pressio = [-1, -1, -1, this.type == "lever"? 0 : -1, 1]; // Out0, In0, In1
+        this.pressio = [-1, -1, -1, type == "lever"? 0 : -1, type == "lever"? 1 : -1]; // Out0, In0, In1
 
         this.wires = [];
 
@@ -30,9 +30,12 @@ class Valvula
     draw()
     {
         //Move
-        this.pos += (this.pressio[4] - this.pressio[3]) / 4.;
-        this.pos = min(1, max(0, this.pos));
-        
+        if (this.pressio[3] + this.pressio[4] > -1)
+        {
+            this.pos += (this.pressio[4] - this.pressio[3]) / 4.;
+            this.pos = min(1, max(0, this.pos));
+        }
+
         for (let i = 0; i < this.wires.length; i++)
             this.wires[i].draw();
 
