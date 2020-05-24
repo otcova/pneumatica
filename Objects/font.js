@@ -1,19 +1,25 @@
 class Font
 {
-    constructor(x, y, angle) // ori => -1 / 1
+    constructor(x, y, angle, iconSize) // ori => -1 / 1
     {
         this.x = x;
         this.y = y;
         this.angle = angle;
-        this.wire = new ObjWire(angle, x, y, 0, 0, 0);
+        
+        if (iconSize == undefined) this.wire = new ObjWire(angle, x, y, 0, 0, 0);
+        else {
+            this.iconSize = iconSize;
+            this.x += .8 * this.iconSize;
+        }
     }
 
     draw()
     {
-        this.wire.draw();
+        if (this.iconSize == undefined) this.wire.draw();
         
         push();
         drawTransforms(this.x, this.y, this.angle);
+        if (this.iconSize != undefined) scale(this.iconSize);
 
         stroke(0, 230);
         fill(255);

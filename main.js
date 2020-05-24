@@ -99,24 +99,8 @@ function mouseReleased()
                 setWire(wmxPress, y, 1, pen == "wire");
         }
         break;
-    case "font":
-        addObject(new Font(wmx, wmy, penAngle));
-        break;
-    case "terra":
-        addObject(new Terra(wmx, wmy, penAngle));
-        break;
-    case "cilindre":
-        addObject(new Cilindre(wmx, wmy, penAngle));
-        break;
-    case "v reg":
-        addObject(new ValvulaReg(wmx, wmy, penAngle));
-        break;
-    case "v 3/2":
-        addObject(new Valvula(wmx, wmy, "pressio", penAngle));
-        break;
-    case "v 3/2 p":
-        addObject(new Valvula(wmx, wmy, "lever", penAngle));
-        break;
+    default:
+        addObject(createObject(pen));
     }
 }
 
@@ -150,48 +134,30 @@ function DrawPreview()
 {
     if(mouseX > windowWidth-guiTotalWidth || mouseButton != LEFT) return;
 
-    switch(pen)
+    if (pen == "remove")
     {
-    case "remove":
-    case "wire":
-        if (pen == "remove") { 
-            if (wmx - wmxPress == 0 && wmy - wmyPress == 0) {
-                let objIndex = getObjectIn();
-                return;
-            }
-            stroke(250, 100, 100); 
-            strokeWeight(3); 
+        if (wmx - wmxPress == 0 && wmy - wmyPress == 0) {
+            let objIndex = getObjectIn();
+            return;
         }
-        else { 
-            stroke(0); 
-            strokeWeight(1); 
-        }
-
+        stroke(250, 100, 100); 
+        strokeWeight(3); 
         if (abs(wmx - wmxPress) > abs(wmy - wmyPress))
             line(wmxPress * wireLength, wmyPress * wireLength, wmx * wireLength, wmyPress * wireLength);
         else
             line(wmxPress * wireLength, wmyPress * wireLength, wmxPress * wireLength, wmy * wireLength);
-
-        break;
-    case 'font':
-        new Font(wmx, wmy, penAngle).draw();
-        break;
-    case 'terra':
-        new Terra(wmx, wmy, penAngle).draw();
-        break;
-    case "cilindre":
-        new Cilindre(wmx, wmy, penAngle).draw();
-        break;
-    case "v reg":
-        new ValvulaReg(wmx, wmy, penAngle).draw();
-        break;
-    case "v 3/2":
-        new Valvula(wmx, wmy, "pressio", penAngle).draw();
-        break;
-    case "v 3/2 p":
-        new Valvula(wmx, wmy, "lever", penAngle).draw();
-        break;
     }
+    else if (pen == "wire")
+    {
+        stroke(0); 
+        strokeWeight(1);
+        if (abs(wmx - wmxPress) > abs(wmy - wmyPress))
+            line(wmxPress * wireLength, wmyPress * wireLength, wmx * wireLength, wmyPress * wireLength);
+        else
+            line(wmxPress * wireLength, wmyPress * wireLength, wmxPress * wireLength, wmy * wireLength);
+    }
+    else
+        createObject(pen).draw();
 }
 
 function mouseDragged()
@@ -218,4 +184,3 @@ function mouseWheel(event) {
 document.oncontextmenu = function() {
     return false;
 }
-

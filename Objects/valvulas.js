@@ -1,6 +1,6 @@
 class Valvula
 {
-    constructor(x, y, type, angle) // type = "pressio" / "lever"
+    constructor(x, y, type, angle, iconSize) // type = "pressio" / "lever"
     {
         this.type = type;
         
@@ -13,14 +13,23 @@ class Valvula
 
         this.pressio = [-1, -1, -1, type == "lever"? 0 : -1, type == "lever"? 1 : -1]; // Out0, In0, In1
 
-        this.wires = [];
+        if (iconSize == undefined)
+        {
+            this.wires = [];
 
-        this.wires.push(new ObjWire(angle, x, y, 0, 0, 3));  //Out0
-        this.wires.push(new ObjWire(angle, x, y, 0, 2, 1));  //In0 
-        this.wires.push(new ObjWire(angle, x, y, 1, 2, 1));  //In1 
-        if (this.type == "pressio") {
-            this.wires.push(new ObjWire(angle, x, y, -2, 1, 2));
-            this.wires.push(new ObjWire(angle, x, y, 3, 1, 0));
+            this.wires.push(new ObjWire(angle, x, y, 0, 0, 3));  //Out0
+            this.wires.push(new ObjWire(angle, x, y, 0, 2, 1));  //In0 
+            this.wires.push(new ObjWire(angle, x, y, 1, 2, 1));  //In1 
+            if (this.type == "pressio") {
+                this.wires.push(new ObjWire(angle, x, y, -2, 1, 2));
+                this.wires.push(new ObjWire(angle, x, y, 3, 1, 0));
+            }
+        }
+        else
+        {
+            this.iconSize = iconSize / 2.2;
+            this.y -= 1 * this.iconSize;
+            if (this.type == "pressio") this.x -= 0.5 * this.iconSize;
         }
 
         this.dotPosALever = rotateDots(angle, x, y, -2, 1);
@@ -29,19 +38,23 @@ class Valvula
 
     draw()
     {
-        //Move
-        if (this.pressio[3] + this.pressio[4] > -1)
-        {
-            this.pos += (this.pressio[4] - this.pressio[3]) / 4.;
-            this.pos = min(1, max(0, this.pos));
-        }
-
-        for (let i = 0; i < this.wires.length; i++)
-            this.wires[i].draw();
-
         push();
+
+        if (this.iconSize == undefined)
+        {
+            //Move
+            if (this.pressio[3] + this.pressio[4] > -1)
+            {
+                this.pos += (this.pressio[4] - this.pressio[3]) / 4.;
+                this.pos = min(1, max(0, this.pos));
+            }
+
+            for (let i = 0; i < this.wires.length; i++)
+                this.wires[i].draw();
+        }
         drawTransforms(this.x, this.y, this.angle);
-        
+        if (this.iconSize != undefined) scale(this.iconSize);
+
         if (this.type == "pressio") 
         {
             if (this.pressio[3] == -1) {
@@ -104,7 +117,7 @@ class Valvula
         drawTope(3, 2);
         line(1.5, 0, 1.5, 2);
         
-        drawArrow(1, 2, 0, 0);
+        drawArrow(0, 0, 1, 2);
         drawArrow(2, 2, 2, 0);
 
         pop();

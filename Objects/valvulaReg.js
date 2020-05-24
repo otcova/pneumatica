@@ -1,24 +1,30 @@
 class ValvulaReg
 {
-    constructor(x, y, angle)
+    constructor(x, y, angle, iconSize)
     {
         this.x = x;
         this.y = y;
         this.angle = (3+angle)%4;
         this.pressioA = 0;
         this.pressioB = 0;
-        this.wireA = new ObjWire(this.angle, this.x, this.y, -1, 0, 2);
-        this.wireB = new ObjWire(this.angle, this.x, this.y, 1, 0, 0);
+        if (iconSize == undefined) {
+            this.wireA = new ObjWire(this.angle, this.x, this.y, -1, 0, 2);
+            this.wireB = new ObjWire(this.angle, this.x, this.y, 1, 0, 0);
+        }
+        else
+            this.iconSize = iconSize / 1.5;
     }
 
     draw()
     {
-        this.wireA.draw();
-        this.wireB.draw();
-
+        if (this.iconSize == undefined) {
+            this.wireA.draw();
+            this.wireB.draw();
+        }
         push();
         drawTransforms(this.x, this.y, this.angle);
-
+        if (this.iconSize != undefined) scale(this.iconSize);
+        
         stroke(0);
         fill(255);
 

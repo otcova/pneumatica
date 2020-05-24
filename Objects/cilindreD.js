@@ -1,30 +1,50 @@
 class Cilindre
 {
-    constructor(x, y, angle) // angle => 0 / 1 / 2 / 3 (numero de rotacions de 90º)
+    constructor(x, y, angle, iconSize) // angle => 0 / 1 / 2 / 3 (numero de rotacions de 90º)
     {
         this.x = x;
         this.y = y;
         this.angle = angle;
 
+        this.pos = 1;
         this.pressioA = 0;
         this.pressioB = 0;
-        this.pos = 1;
 
-        this.wireA = new ObjWire(this.angle, this.x, this.y, 0, 2, 1);
-        this.wireB = new ObjWire(this.angle, this.x, this.y, 5, 2, 1);
+        if (iconSize == undefined)
+        {
+            this.x -= 2;
+            this.y -= 1;
+            this.wireA = new ObjWire(this.angle, this.x, this.y, 0, 2, 1);
+            this.wireB = new ObjWire(this.angle, this.x, this.y, 5, 2, 1);
+        }
+        else
+        {
+            this.iconSize = iconSize /2.;
+            this.x -= 2.7 * this.iconSize;
+            this.y -= 1 * this.iconSize;
+            this.pos = .3;
+        }
     }
 
     draw()
     {
-        this.pos = min(1, max(0, this.pos + (this.pressioA - this.pressioB)/10));
-
+        
         push();
         
-        this.wireA.draw();
-        this.wireB.draw();
-
+        if (this.iconSize == undefined)
+        {
+            this.pos = min(1, max(0, this.pos + (this.pressioA - this.pressioB)/10));
+            this.wireA.draw();
+            this.wireB.draw();
+        }
+        
         drawTransforms(this.x, this.y, this.angle);
         
+        if (this.iconSize != undefined)
+        {
+            scale(this.iconSize);
+        }
+
         //fill(100 - this.pressioA * 50, 200, 200 - this.pressioA * 50);
         colorPressio(this.pressioA);
         stroke(0, 150);

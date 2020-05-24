@@ -324,3 +324,22 @@ function drawMotlla(len, pos, motllax, motllaAlt, motllaBaix)
         motllax -= deltaMotllax
     }
 }
+
+function createObject(nom, p1 = wmx, p2 = wmy, p3 = penAngle, p4)
+{
+    switch(nom)
+    {
+    case 'font':
+        return new Font(p1, p2, p3, p4);
+    case 'terra':
+        return new Terra(p1, p2, p3, p4);
+    case "cilindre":
+        return new Cilindre(p1, p2, p3, p4);
+    case "v reg":
+        return new ValvulaReg(p1, p2, p3, p4);
+    case "v 3/2":
+        return new Valvula(p1, p2, "pressio", p3, p4);
+    case "v 3/2 p":
+        return new Valvula(p1, p2, "lever", p3, p4);
+    }
+}

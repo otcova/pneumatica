@@ -2,29 +2,33 @@ var mouseIsReleased = false;
 
 let guiYdelta = 0;
 let guiMarge = 13;
-let guiWidth = 110;
+let guiWidth = 120;
 let guiHeight = 70;
-let guiLavelHeight = 25;
+let guiTextHeight = guiHeight/2;
+let guiLavelHeight = 30;
 let guiTotalWidth = guiMarge*2 + guiWidth;
 let guiLength = guiHeight;
 
+let guiButtonOver = false
+let guiButtonPressing = false
+
 function button(x, y, guiWidth, guiHeight, active = false)
 {
-    let over = false;
-    let pressing = false;
+    guiButtonOver = false;
+    guiButtonPressing = false;
     let released = false;
 
-    fill(175);
+    fill(150);
     noStroke();
 
     if (overRect(x, y, guiWidth, guiHeight)) 
     {
-        over = true;
+        guiButtonOver = true;
         stroke(50);
         if (mouseIsPressed)
         {
-            pressing = true;
-            fill(240);
+            guiButtonPressing = true;
+            fill(100);
         }
         if (mouseIsReleased)
             released = true;
@@ -63,39 +67,39 @@ function updateGUI()
     let y = guiMarge + guiYdelta;
 
     noStroke();
-    fill(220);
+    fill(210);
     rect(x - guiMarge, 0, guiWidth *2, windowHeight)
 
-    if (button(x, y, guiWidth, guiHeight)){
+    if (button(x, y, guiWidth, guiTextHeight)){
         penAngle += 1;
         if (penAngle > 3) penAngle = 0
     }
     fill(255);
     strokeWeight(2);
-    text("girar", x +guiWidth/ 2, y + guiHeight/2);
-    y += guiHeight + guiMarge;
+    text("girar (q / w)", x +guiWidth/ 2, y + guiTextHeight/2);
+    y += guiTextHeight + guiMarge;
 
-    if (button(x, y, guiWidth, guiHeight, pen == "remove"))
+    if (button(x, y, guiWidth, guiTextHeight, pen == "remove"))
         pen = "remove";
     fill(255);
     strokeWeight(2);
-    text("goma", x +guiWidth/ 2, y + guiHeight/2);
-    y += guiHeight + guiMarge;
-    if (button(x, y, guiWidth, guiHeight, pen == "wire"))
+    text("goma", x +guiWidth/ 2, y + guiTextHeight/2);
+    y += guiTextHeight + guiMarge;
+    if (button(x, y, guiWidth, guiTextHeight, pen == "wire"))
         pen = "wire";
     fill(255);
     strokeWeight(2);
-    text("cable", x +guiWidth/ 2, y + guiHeight/2);
-    y += guiHeight + guiMarge;
-
-    guiHeight = 65;
+    text("cable", x +guiWidth/ 2, y + guiTextHeight/2);
+    y += guiTextHeight + guiMarge;
+    
     textSize(20);
     textAlign(CENTER, CENTER);
-    ["font", "terra", "cilindre", "-valvules", "v reg", "v 3/2", "v 3/2 p", "- provisional"].forEach(function(nom) {
+
+    ["font", "terra", "cilindre", "-valvules", "v reg", "v 3/2", "v 3/2 p", "- provisional"].forEach(function(nom, index) {
         if (nom[0] == '-')
         {
             noStroke();
-            fill(175);
+            fill(150);
             rect(windowWidth-guiTotalWidth, y, guiTotalWidth, guiLavelHeight);
             fill(255);
             text(nom.substr(1, 20), x +guiWidth/ 2, y + guiLavelHeight/2);
@@ -105,15 +109,22 @@ function updateGUI()
         {
             if (button(x, y, guiWidth, guiHeight, pen == nom))
                 pen = nom;
-            fill(255);
-            strokeWeight(2);
-            text(traduirNom(nom), x +guiWidth/ 2, y + guiHeight/2);
+            if (guiButtonOver || pen == nom)
+            {
+                createObject(nom, (x+guiWidth/ 2) / wireLength, (y + guiHeight/2) / wireLength, 0, 1).draw();                
+            }
+            else
+            {
+                fill(255);
+                strokeWeight(2);
+                text(traduirNom(nom), x +guiWidth/ 2, y + guiHeight/2);
+            }
             y += guiHeight + guiMarge;
         }
     })
     if (button(x, y, guiWidth, guiHeight))
     {
-        addObject(new Cilindre(4, 3, 0));
+        addObject(new Cilindre(6, 4, 0));
         addObject(new Valvula(9, 6, "pressio", 0));
         addObject(new Valvula(4, 9, "lever", 0));
         addObject(new ValvulaReg(13, 10, 0));
