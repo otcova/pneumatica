@@ -81,9 +81,14 @@ class Valvula
             stroke(0, 200);
 
             if (((wmx == this.dotPosALever[0] && wmy == this.dotPosALever[1]) || 
-                (wmx == this.dotPosBLever[0] && wmy == this.dotPosBLever[1])) && mouseIsReleased)
-                this.pressio[3] = 2 - this.pressio[3];
-
+                (wmx == this.dotPosBLever[0] && wmy == this.dotPosBLever[1])))
+                {
+                    mouseIsPressed = false;
+                    if (mouseIsReleased) {
+                        this.pressio[3] = 2 - this.pressio[3];
+                        mouseIsReleased = false;
+                    }
+                }
             //interuptor
             beginShape();
             vertex(this.pressio[3] < 1? -2.5 : -2.75, -.3);

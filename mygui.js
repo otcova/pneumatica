@@ -1,5 +1,6 @@
 var mouseIsReleased = false;
 
+let mobile = false;
 let guiYdelta = 0;
 let guiMarge = 13;
 let guiWidth = 120;
@@ -76,7 +77,7 @@ function updateGUI()
     }
     fill(255);
     strokeWeight(2);
-    text("girar (q / w)", x +guiWidth/ 2, y + guiTextHeight/2);
+    text(mobile? "girar" : "girar (q / w)", x +guiWidth/ 2, y + guiTextHeight/2);
     y += guiTextHeight + guiMarge;
 
     if (button(x, y, guiWidth, guiTextHeight, pen == "remove"))
@@ -91,8 +92,7 @@ function updateGUI()
     strokeWeight(2);
     text("cable", x +guiWidth/ 2, y + guiTextHeight/2);
     y += guiTextHeight + guiMarge;
-    
-    textSize(20);
+
     textAlign(CENTER, CENTER);
 
     ["font", "terra", "cilindre", "-valvules", "v reg", "v 3/2", "v 3/2 p", "- provisional"].forEach(function(nom, index) {

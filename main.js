@@ -4,8 +4,29 @@ function setup()
 {
     createCanvas(windowWidth, windowHeight);
 
-    width = int((displayWidth / wireLength) * 1.25);
-    height = int((displayHeight / wireLength) * 1.25);
+    if (window.orientation != undefined) {
+        
+        mobile = true;
+        guiMarge = 10;
+        wireLength = 20;
+        guiWidth = 70;
+        guiHeight = 40;
+        guiTotalWidth = guiMarge*2 + guiWidth;
+        calcForFrame = 1;
+        textSize(15);
+
+        width = int((displayWidth / wireLength));
+        height = int((displayHeight / wireLength) + 1);
+
+    }
+    else{
+        textSize(20);
+
+        width = max(20, int((displayWidth / wireLength) * 1.25));
+        height = max(20, int((displayHeight / wireLength) * 1.25));
+    }
+
+    
 
     for(let x = 0; x < width; x++)
     {
@@ -15,10 +36,20 @@ function setup()
             wires[x][y] = [new Wire(), new Wire()];
         }
     }
-    if (typeof window.orientation !== 'undefined') {
-        print("Mobile");
-        calcForFrame = 1;
-    }
+
+    print(width, height);
+}
+
+function updateMouse()
+{
+    let tmouseX = mouseX - taulellx;
+    let tmouseY = mouseY - taulelly;
+
+    mx = int(tmouseX / wireLength);
+    my = int(tmouseY / wireLength);
+    wmx = int(tmouseX / wireLength + 0.5);
+    wmy = int(tmouseY / wireLength + 0.5);
+    md = (tmouseX % wireLength) < (tmouseY % wireLength)? 1 : 0;
 }
 
 function draw()
@@ -29,11 +60,8 @@ function draw()
     let tmouseX = mouseX - taulellx;
     let tmouseY = mouseY - taulelly;
     
-    mx = int(tmouseX / wireLength);
-    my = int(tmouseY / wireLength);
-    wmx = int(tmouseX / wireLength + 0.5);
-    wmy = int(tmouseY / wireLength + 0.5);
-    md = (tmouseX % wireLength) < (tmouseY % wireLength)? 1 : 0;
+    updateMouse();
+    
 
     if ((tmouseX % wireLength) + (tmouseY % wireLength) > wireLength) {
         if (md == 0) {
@@ -52,7 +80,6 @@ function draw()
         refreshPressio();
         UpdateAfterObj();
     }
-
     drawTaulell();
     drawWires();
     DrawObj();
@@ -63,8 +90,11 @@ function draw()
     updateGUI();
 }
 
-function mousePressed()
-{
+function touchStarted() {
+    updateMouse();
+    mousePressed();
+}
+function mousePressed() {
     wmxPress = wmx;
     wmyPress = wmy;
 }

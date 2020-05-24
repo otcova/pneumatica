@@ -28,7 +28,6 @@ class Wire
             if (mx == x && my == y && md == d) 
             {
                 textAlign(CENTER, CENTER);
-                textSize(20);
                 stroke(255);
                 strokeWeight(9);
                 fill(100)

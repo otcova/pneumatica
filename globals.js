@@ -24,7 +24,7 @@ let wmyPress = 0;
 let taulellx = 0;
 let taulelly = 0;
 
-let calcForFrame = 3;
+let calcForFrame = 4;
 
 function getWire(x, y, d)
 {
@@ -55,8 +55,11 @@ function getPressio(x, y, d)
 
 function colorPressio(p) // the condition that says what is 'presio'
 {
-    stroke(100 - p*43, 100 + p*50, 200 - p*90);
-    fill(100 - p*43, 100 + p*50, 200 - p*90);
+    let color = [120 - p*43, 50 + p*80, 200 - p*90];
+    stroke(color[0], color[1], color[2]);
+    fill(color[0], color[1], color[2]);
+    //stroke(100 - p*43, 100 + p*50, 200 - p*90);
+    //fill(100 - p*43, 100 + p*50, 200 - p*90);
 }
 
 function colorStrokePressio(p) // the condition that says what is 'presio'
