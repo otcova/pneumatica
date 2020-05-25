@@ -26,6 +26,8 @@ let taulelly = 0;
 
 let calcForFrame = 4;
 
+let minimaPressio = 2;
+
 function getWire(x, y, d)
 {
     if (x < 0 || x >= width || y < 0 || y >= height) return new Wire();
@@ -53,13 +55,14 @@ function getPressio(x, y, d)
     return 0;
 }
 
+function normalize(val, max, min) { return (val - min) / (max - min); }
+
 function colorPressio(p) // the condition that says what is 'presio'
 {
-    let color = [120 - p*43, 50 + p*80, 200 - p*90];
+    p = normalize(p, 8, minimaPressio);
+    let color = [120 - p*86, 50 + p*160, 200 - p*180];
     stroke(color[0], color[1], color[2]);
     fill(color[0], color[1], color[2]);
-    //stroke(100 - p*43, 100 + p*50, 200 - p*90);
-    //fill(100 - p*43, 100 + p*50, 200 - p*90);
 }
 
 function colorStrokePressio(p) // the condition that says what is 'presio'
@@ -187,6 +190,19 @@ function drawWires()
             getWire(x, y, 0).draw(x, y, 0);
             getWire(x, y, 1).draw(x, y, 1);
         }
+    }
+}
+
+function drawMousePressio()
+{
+    let wire = getWire(mx, my, md);
+    if (wire.active) 
+    {
+        textAlign(LEFT, BOTTOM);
+        stroke(255);
+        strokeWeight(8);
+        fill(100)
+        text(wire.pressio.toFixed(1) + " bars", mouseX, mouseY);
     }
 }
 

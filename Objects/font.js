@@ -37,7 +37,7 @@ class Font
     }
 
     updateBeforePressio() {
-        this.wire.setPressio(2);
+        this.wire.setPressio(8);
     }
     updateAfterPressio() {}
 

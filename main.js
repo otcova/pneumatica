@@ -83,7 +83,8 @@ function draw()
     drawTaulell();
     drawWires();
     DrawObj();
-
+    drawMousePressio();
+    
     if(mouseIsPressed) DrawPreview();
     pop();
 

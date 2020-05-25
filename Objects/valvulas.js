@@ -41,7 +41,7 @@ class Valvula
             //Move
             if (this.pressio[3] + this.pressio[4] > -1)
             {
-                this.pos += (this.pressio[4] - this.pressio[3]) / 4.;
+                this.pos += (this.pressio[4] - this.pressio[3]) / 7.;
                 this.pos = min(1, max(0, this.pos));
             }
 
@@ -84,7 +84,7 @@ class Valvula
                 {
                     mouseIsPressed = false;
                     if (mouseIsReleased) {
-                        this.pressio[3] = 2 - this.pressio[3];
+                        this.pressio[3] = 3 - this.pressio[3];
                         mouseIsReleased = false;
                     }
                 }
@@ -130,9 +130,8 @@ class Valvula
         if (this.pressio[0] != -1)
         {
             if (this.pos > 0.5) {
-                if (this.pressio[1] != -1) {
+                if (this.pressio[1] != -1 && this.pressio[0] < this.pressio[1]) {
                     let p = (this.pressio[0] + this.pressio[1]) / 2.;
-                    
                     this.wires[0].setPressio(p);
                     this.wires[1].setPressio(p);
                 }

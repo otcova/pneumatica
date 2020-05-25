@@ -5,8 +5,8 @@ class ValvulaReg
         this.x = x;
         this.y = y;
         this.angle = (3+angle)%4;
-        this.pressioA = 0;
-        this.pressioB = 0;
+        this.pressioA = minimaPressio;
+        this.pressioB = minimaPressio;
 
         if (iconSize != undefined)
             this.iconSize = iconSize / 1.5;
@@ -37,11 +37,12 @@ class ValvulaReg
     }
     updateBeforePressio()
     {
-        this.wireB.setPressio(this.pressio / 2.);
+        this.wireB.setPressio(max(this.pressioB, this.pressioA / 2.));
     }
     updateAfterPressio() 
     {
-        this.pressio = this.wireA.pressio;
+        this.pressioA = this.wireA.pressio;
+        this.pressioB = this.wireB.pressio;
     }
 
     espaiDots() {

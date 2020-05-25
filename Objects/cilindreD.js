@@ -29,7 +29,7 @@ class Cilindre
         
         if (this.iconSize == undefined)
         {
-            this.pos = min(1, max(0, this.pos + (this.pressioA - this.pressioB)/10));
+            this.pos = min(1, max(0, this.pos + (this.pressioA - this.pressioB)/30));
         }
         this.wireA.draw();
         this.wireB.draw();
