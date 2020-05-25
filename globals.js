@@ -98,32 +98,42 @@ function recSortWire(grupi, wire, x, y, d)
     wire.grupi = grupi;
     wireGrups[grupi].push([x, y, d]);
 
-    let contactWire;
+    let cWire; // contactWire
 
     if (d == 0)
-        contactWire = [
+    cWire = [
             [x, y, 1],
             [x, y-1, 1],
-            [x-1, y, 0],
             [x+1, y, 1],
             [x+1, y-1, 1],
+            [x-1, y, 0],
             [x+1, y, 0]
         ];
     else
-        contactWire = [
+    cWire = [
             [x, y, 0],
             [x-1, y, 0],
-            [x, y-1, 1],
             [x, y+1, 0],
             [x-1, y+1, 0],
+            [x, y-1, 1],
             [x, y+1, 1]
         ];
 
-    for (let i = 0; i < 6; i++)
-    {
-        let wirec = getWire(contactWire[i][0], contactWire[i][1], contactWire[i][2]);
-        if(wirec.active && wirec.grupi == -1)
-            recSortWire(grupi, wirec, contactWire[i][0], contactWire[i][1], contactWire[i][2]);
+    if (getWire(cWire[0][0], cWire[0][1], cWire[0][2]).active && getWire(cWire[1][0], cWire[1][1], cWire[1][2]).active && getWire(cWire[4][0], cWire[4][1], cWire[4][2]).active) {
+        cWire[0][2] = -1;
+        cWire[1][2] = -1;
+    }
+    if (getWire(cWire[2][0], cWire[2][1], cWire[2][2]).active && getWire(cWire[3][0], cWire[3][1], cWire[3][2]).active && getWire(cWire[5][0], cWire[5][1], cWire[5][2]).active) {
+        cWire[2][2] = -1;
+        cWire[3][2] = -1;
+    }
+
+    for (let i = 0; i < 6; i++) {
+        if (cWire[i][2] != -1) {
+            let wirec = getWire(cWire[i][0], cWire[i][1], cWire[i][2]);
+            if(wirec.active && wirec.grupi == -1)
+                recSortWire(grupi, wirec, cWire[i][0], cWire[i][1], cWire[i][2]);
+        }
     }
 }
 
@@ -185,10 +195,19 @@ function drawTaulell()
 
 function drawWires()
 {
+    let sum = 0;
     for(x = 0; x < width; x++) {
         for(y = 0; y < height; y++) {
             getWire(x, y, 0).draw(x, y, 0);
             getWire(x, y, 1).draw(x, y, 1);
+            
+            noStroke();
+            sum = 0;
+            if (getWire(x, y, 0).active) sum++;
+            if (getWire(x, y, 1).active) sum++;
+            if (getWire(x-1, y, 0).active) sum++;
+            if (getWire(x, y-1, 1).active) sum++;
+            if (sum == 3) ellipse(x*wireLength, y*wireLength, 0.2*wireLength, 0.2*wireLength);
         }
     }
 }

@@ -84,7 +84,7 @@ function draw()
     drawWires();
     DrawObj();
     drawMousePressio();
-    
+
     if(mouseIsPressed) DrawPreview();
     pop();
 
@@ -104,7 +104,7 @@ function mouseReleased()
 {
     buttonsReleased();
 
-    if(mouseX    > windowWidth-guiTotalWidth || mouseButton != LEFT) return;
+    if(mouseX > windowWidth-guiTotalWidth || mouseButton != LEFT) return;
     
     switch(pen)
     {
