@@ -9,19 +9,17 @@ class Cilindre
         this.pos = 1;
         this.pressioA = 0;
         this.pressioB = 0;
-
-        if (iconSize == undefined)
-        {
-            this.wireA = new ObjWire(this.angle, this.x, this.y, -3, 1, 1);
-            this.wireB = new ObjWire(this.angle, this.x, this.y, 2, 1, 1);
-        }
-        else
+        
+        if (iconSize != undefined)
         {
             this.iconSize = iconSize /2.;
             this.pos = .3;
             this.pressioA = 1.5;
             this.pressioB = 1;
         }
+
+        this.wireA = new ObjWire(this.angle, this.x, this.y, -3, 1, 1, this.iconSize);
+        this.wireB = new ObjWire(this.angle, this.x, this.y, 2, 1, 1, this.iconSize);
     }
 
     draw()
@@ -32,9 +30,9 @@ class Cilindre
         if (this.iconSize == undefined)
         {
             this.pos = min(1, max(0, this.pos + (this.pressioA - this.pressioB)/10));
-            this.wireA.draw();
-            this.wireB.draw();
         }
+        this.wireA.draw();
+        this.wireB.draw();
         
         drawTransforms(this.x, this.y, this.angle);
         
@@ -44,16 +42,16 @@ class Cilindre
         //fill(100 - this.pressioA * 50, 200, 200 - this.pressioA * 50);
         colorPressio(this.pressioA);
         stroke(0, 150);
-        rect(-3, -1, 5 * this.pos, 2)
+        rect(-3.1, -1, 5.2 * this.pos, 2)
         colorPressio(this.pressioB);
         stroke(0, 150);
         //fill(100 - this.pressioB * 50, 200, 200 - this.pressioB * 50);
-        rect(5 * this.pos - 3, -1, 5 * (1-this.pos), 2)
+        rect(5.2 * this.pos - 3.1, -1, 5.2 * (1-this.pos), 2)
 
-        translate(4 * this.pos, 0);
+        translate(4.2 * this.pos, 0);
         fill(230)
-        rect(-2.5, -.25, 4, 0.5);
-        rect(-3, -1, 1,  2);
+        rect(-2.75, -.25, 4, 0.5);
+        rect(-3.1, -1, 1,  2);
 
         pop();
     }

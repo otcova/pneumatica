@@ -5,8 +5,10 @@ class Terra
         this.x = x;
         this.y = y;
         this.angle = angle;
-        if (iconSize == undefined) this.wire = new ObjWire(angle, x, y, 0, 0, 3);
-        else  {
+
+        this.wire = new ObjWire(angle, x, y, 0, 0, 3, iconSize);
+        
+        if (iconSize != undefined) {
             this.iconSize = iconSize;
             this.y -= .1 * this.iconSize;
         }
@@ -14,7 +16,7 @@ class Terra
 
     draw()
     {
-        if (this.iconSize == undefined) this.wire.draw();
+        this.wire.draw();
         
         push();
         drawTransforms(this.x, this.y, this.angle);

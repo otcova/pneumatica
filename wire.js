@@ -42,38 +42,17 @@ class Wire
     }
 }
 
-function drawObjWire(x, y, d, ori)
-{
-    stroke(0, 230);
-    strokeWeight(1);
-    if (!getWire(x, y, d).active)
-    {
-        if (d == 0)
-            if (ori == 1)
-                line(x*wireLength+1, y*wireLength, (x+.3)*wireLength, y*wireLength);
-            else
-                line((x+1.)*wireLength-1, y*wireLength, (x+.7)*wireLength, y*wireLength);
-        else
-            if (ori == 1)
-                line(x*wireLength, y*wireLength, x*wireLength, (y+.3)*wireLength);
-            else
-                line(x*wireLength, (y+1.)*wireLength, x*wireLength, (y+.7)*wireLength);
-    }
-}
-
-
 class ObjWire
 {
-    static auto(obj, x, y)
-    {
-        let objw = new ObjWire(obj.angle, obj.x, obj.y, x, y, 0);
-        objw.x += obj.deltaX;
-        objw.x += obj.deltaY;
-        return objw;
-    }
-    constructor(angle, cx, cy, x, y, wangle) // angle => 0 / 1 / 2 / 3 (numero de rotacions de 90º)
+    constructor(angle, cx, cy, x, y, wangle, iconScale) // angle => 0 / 1 / 2 / 3 (numero de rotacions de 90º)
     {
         let mem;
+        if (iconScale != undefined)
+        {
+            this.iconScale = iconScale;
+            x *= iconScale;
+            y *= iconScale;
+        }
         for(let i = 0; i < angle; i++) {
             mem = x;
             x = -y;
@@ -85,24 +64,33 @@ class ObjWire
         this.y = y + cy + (wangle == 3? -1 : 0);
         this.d = wangle % 2;
         this.ori = wangle > 1? 0 : 1;
+       
     }
 
     draw()
     {
-        stroke(0, 230);
-        strokeWeight(1);
-        if (!getWire(this.x, this.y, this.d).active)
+        stroke(50);
+        strokeWeight(1.);
+        let divuixar = true;
+        let s = wireLength; // scale
+        let is = 1; // icon scale
+        if (this.iconScale == undefined)
+            divuixar = !getWire(this.x, this.y, this.d).active;
+        else
+            is = this.iconScale;
+
+        if (divuixar)
         {
             if (this.d == 0)
                 if (this.ori == 1)
-                    line(this.x*wireLength+1, this.y*wireLength, (this.x+.3)*wireLength, this.y*wireLength);
+                    line(this.x*s+1, this.y*s, (this.x+.3*is)*s, this.y*s);
                 else
-                    line((this.x+1.)*wireLength-1, this.y*wireLength, (this.x+.7)*wireLength, this.y*wireLength);
+                    line((this.x+1.)*s-1, this.y*s, (this.x+1.-is*.3)*s, this.y*s);
             else
                 if (this.ori == 1)
-                    line(this.x*wireLength, this.y*wireLength, this.x*wireLength, (this.y+.3)*wireLength);
+                    line(this.x*s, this.y*s, this.x*s, (this.y+.3*is)*s);
                 else
-                    line(this.x*wireLength, (this.y+1.)*wireLength, this.x*wireLength, (this.y+.7)*wireLength);
+                    line(this.x*s, (this.y+1.)*s, this.x*s, (this.y+1.-is*.3)*s);
         }
     }
 

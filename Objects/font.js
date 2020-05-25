@@ -6,14 +6,17 @@ class Font
         this.y = y;
         this.angle = angle;
         
-        if (iconSize == undefined) this.wire = new ObjWire(angle, x, y, 0, 0, 0);
-        else this.iconSize = iconSize;
-        
+        if (iconSize != undefined) {
+            this.iconSize = iconSize;
+            this.wire = new ObjWire(angle, x, y, 0.5, 0, 0, iconSize);
+        }
+        else
+            this.wire = new ObjWire(angle, x, y, 0, 0, 0, iconSize);
     }
 
     draw()
     {
-        if (this.iconSize == undefined) this.wire.draw();
+        this.wire.draw();
         
         push();
         drawTransforms(this.x, this.y, this.angle);

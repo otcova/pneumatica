@@ -7,20 +7,19 @@ class ValvulaReg
         this.angle = (3+angle)%4;
         this.pressioA = 0;
         this.pressioB = 0;
-        if (iconSize == undefined) {
-            this.wireA = new ObjWire(this.angle, this.x, this.y, -1, 0, 2);
-            this.wireB = new ObjWire(this.angle, this.x, this.y, 1, 0, 0);
-        }
-        else
+
+        if (iconSize != undefined)
             this.iconSize = iconSize / 1.5;
+        
+        this.wireA = new ObjWire(this.angle, this.x, this.y, -1, 0, 2, this.iconSize);
+        this.wireB = new ObjWire(this.angle, this.x, this.y, 1, 0, 0, this.iconSize);
     }
 
     draw()
     {
-        if (this.iconSize == undefined) {
-            this.wireA.draw();
-            this.wireB.draw();
-        }
+        this.wireA.draw();
+        this.wireB.draw();
+        
         push();
         drawTransforms(this.x, this.y, this.angle);
         if (this.iconSize != undefined) scale(this.iconSize);

@@ -13,23 +13,21 @@ class Valvula
 
         this.pressio = [-1, -1, -1, type == "lever"? 0 : -1, type == "lever"? 1 : -1]; // Out0, In0, In1
 
-        if (iconSize == undefined)
-        {
-            this.wires = [];
-
-            this.wires.push(new ObjWire(angle, x, y, 0, -1, 3));  //Out0
-            this.wires.push(new ObjWire(angle, x, y, 0, 1, 1));  //In0 
-            this.wires.push(new ObjWire(angle, x, y, 1, 1, 1));  //In1 
-            if (this.type == "pressio") {
-                this.wires.push(new ObjWire(angle, x, y, -2, 0, 2));
-                this.wires.push(new ObjWire(angle, x, y, 3, 0, 0));
-            }
-        }
-        else
+        
+        if (iconSize != undefined)
         {
             this.iconSize = iconSize / 2.2;
         }
 
+        this.wires = [];
+        this.wires.push(new ObjWire(angle, x, y, 0, -1, 3, this.iconSize));  //Out0
+        this.wires.push(new ObjWire(angle, x, y, 0, 1, 1, this.iconSize));  //In0 
+        this.wires.push(new ObjWire(angle, x, y, 1, 1, 1, this.iconSize));  //In1 
+        if (this.type == "pressio") {
+            this.wires.push(new ObjWire(angle, x, y, -2, 0, 2, this.iconSize));
+            this.wires.push(new ObjWire(angle, x, y, 3, 0, 0, this.iconSize));
+        }
+        
         this.dotPosALever = rotateDots(angle, x, y, -2, 0);
         this.dotPosBLever = rotateDots(angle, x, y, -3, 0);
     }
@@ -47,17 +45,18 @@ class Valvula
                 this.pos = min(1, max(0, this.pos));
             }
 
-            for (let i = 0; i < this.wires.length; i++)
-                this.wires[i].draw();
         }
+        for (let i = 0; i < this.wires.length; i++)
+            this.wires[i].draw();
+
         drawTransforms(this.x, this.y, this.angle);
         if (this.iconSize != undefined) scale(this.iconSize);
 
         if (this.type == "pressio") 
         {
             if (this.pressio[3] == -1) {
-                stroke(0, 230);
-                drawSetWeight(1);
+                stroke(50, 255);
+                drawSetWeight(this.iconSize == undefined? 1. : 2.);
             }
             else {
                 colorStrokePressio(this.pressio[3])
@@ -66,8 +65,8 @@ class Valvula
             line(-2, 0, 0, 0);
             
             if (this.pressio[4] == -1) {
-                stroke(0, 230);
-                drawSetWeight(1);
+                stroke(50, 255);
+                drawSetWeight(this.iconSize == undefined? 1. : 2.);
             }
             else {
                 colorStrokePressio(this.pressio[4])
