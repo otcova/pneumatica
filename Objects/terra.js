@@ -6,12 +6,12 @@ class Terra
         this.y = y;
         this.angle = angle;
 
-        this.wire = new ObjWire(angle, x, y, 0, 0, 3, iconSize);
         
         if (iconSize != undefined) {
             this.iconSize = iconSize;
             this.y -= .1 * this.iconSize;
         }
+        this.wire = new ObjWire(angle, x, this.y, 0, 0, 3, iconSize);
     }
 
     draw()

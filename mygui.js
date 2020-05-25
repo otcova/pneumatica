@@ -19,7 +19,7 @@ function button(x, y, guiWidth, guiHeight, active = false)
     guiButtonPressing = false;
     let released = false;
 
-    fill(150);
+    fill(165);
     noStroke();
 
     if (overRect(x, y, guiWidth, guiHeight)) 
@@ -29,7 +29,7 @@ function button(x, y, guiWidth, guiHeight, active = false)
         if (mouseIsPressed)
         {
             guiButtonPressing = true;
-            fill(100);
+            fill(140);
         }
         if (mouseIsReleased)
             released = true;
@@ -68,7 +68,7 @@ function updateGUI()
     let y = guiMarge + guiYdelta;
 
     noStroke();
-    fill(210);
+    fill(220);
     rect(x - guiMarge, 0, guiWidth *2, windowHeight)
     
     if (button(x, y, guiWidth, guiTextHeight) && penAngle[pen] != undefined){
@@ -95,7 +95,7 @@ function updateGUI()
 
     textAlign(CENTER, CENTER);
 
-    ["font", "terra", "cilindre", "-valvules", "v reg", "v 3/2", "v 3/2 p", "- provisional"].forEach(function(nom, index) {
+    ["font", "cilindre", "-valvules", "terra", "v reg", "v 3/2", "v 3/2 p", "- provisional"].forEach(function(nom, index) {
         if (nom[0] == '-')
         {
             noStroke();
@@ -166,6 +166,8 @@ function traduirNom(nom)
     if(nom[0] == 'v' && nom[1] == ' ') nom = nom.substr(2, 20);
     switch (nom)
     {
+        case "terra":
+            return "escapament";
         case "reg":
             return "reguladora";
         case "3/2 p":
