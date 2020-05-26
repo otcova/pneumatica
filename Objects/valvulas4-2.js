@@ -121,7 +121,7 @@ class Valvula4
         line(1.5, -1, 1.5, 1);
         
         drawArrow(0, -1, 1, 1);
-        drawArrow(1, -1, 0, 1);
+        drawArrow(0, 1, 1, -1);
 
         drawArrow(2, 1, 2, -1);
         drawArrow(3, -1, 3, 1);
@@ -155,7 +155,7 @@ class Valvula4
                     this.wires[3].setPressio(p);
                 }
             }
-            else if (this.pressio[2] != -1 && this.pressio[1] > this.pressio[2]) {
+            else if (this.pressio[2] != -1 && this.pressio[1] < this.pressio[2]) {
                 let p = (this.pressio[1] + this.pressio[2]) / 2.;
                 this.wires[1].setPressio(p);
                 this.wires[2].setPressio(p);
