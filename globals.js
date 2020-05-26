@@ -1,7 +1,7 @@
 
 let pen = "wire"; // wire, remove, font, terra
 let penOri = 1;
-let penAngle = { "font":0, "terra":0, "cilindre":0, "v reg":0, "v 3/2":0, "v 3/2 p":0 };
+let penAngle = { "font":0, "terra":0, "cilindre":0, "v reg":0, "v 3/2":0, "v 3/2 p":0, "v 4/2":0, "v 4/2 p":0 };
 
 let width = 50;
 let height = 30;
@@ -381,5 +381,9 @@ function createObject(nom, p1 = wmx, p2 = wmy, p3, p4)
         return new Valvula(p1, p2, "pressio", p3, p4);
     case "v 3/2 p":
         return new Valvula(p1, p2, "lever", p3, p4);
+    case "v 4/2":
+        return new Valvula4(p1, p2, "pressio", p3, p4);
+    case "v 4/2 p":
+        return new Valvula4(p1, p2, "lever", p3, p4);
     }
 }

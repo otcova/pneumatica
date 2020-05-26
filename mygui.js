@@ -95,7 +95,7 @@ function updateGUI()
 
     textAlign(CENTER, CENTER);
 
-    ["font", "cilindre", "-valvules", "terra", "v reg", "v 3/2", "v 3/2 p", "- provisional"].forEach(function(nom, index) {
+    ["font", "cilindre", "-valvules", "terra", "v reg", "v 3/2", "v 3/2 p", "v 4/2", "v 4/2 p", "- provisional"].forEach(function(nom, index) {
         if (nom[0] == '-')
         {
             noStroke();
@@ -172,6 +172,8 @@ function traduirNom(nom)
             return "reguladora";
         case "3/2 p":
             return "3/2 palanca";
+        case "4/2 p":
+            return "4/2 palanca";
     }
     return nom;
 }

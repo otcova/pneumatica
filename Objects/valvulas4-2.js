@@ -1,4 +1,4 @@
-class Valvula
+class Valvula4
 {
     constructor(x, y, type, angle, iconSize) // type = "pressio" / "lever"
     {
@@ -10,8 +10,8 @@ class Valvula
         //this.pressio[3] = 0;
         //this.pressio[4] = this.type == "lever"? 1 : 0;
         this.pos = type == "lever"? 1 : 0; // 0 - 1
-
-        this.pressio = [-1, -1, -1, type == "lever"? 0 : -1, type == "lever"? 1 : -1]; // Out0, In0, In1
+        print(x, y, type, angle, iconSize);
+        this.pressio = [-1, -1, -1, -1, type == "lever"? 0 : -1, type == "lever"? 1 : -1]; // Out0, In0, In1
 
         
         if (iconSize != undefined)
@@ -21,6 +21,7 @@ class Valvula
 
         this.wires = [];
         this.wires.push(new ObjWire(angle, x, y, 0, -1, 3, this.iconSize));  //Out0
+        this.wires.push(new ObjWire(angle, x, y, 1, -1, 3, this.iconSize));  //Out1
         this.wires.push(new ObjWire(angle, x, y, 0, 1, 1, this.iconSize));  //In0 
         this.wires.push(new ObjWire(angle, x, y, 1, 1, 1, this.iconSize));  //In1 
         if (this.type == "pressio") {
@@ -39,9 +40,9 @@ class Valvula
         if (this.iconSize == undefined)
         {
             //Move
-            if (this.pressio[3] + this.pressio[4] > -1)
+            if (this.pressio[4] + this.pressio[5] > -1)
             {
-                this.pos += (this.pressio[4] - this.pressio[3]) / 7.;
+                this.pos += (this.pressio[5] - this.pressio[4]) / 7.;
                 this.pos = min(1, max(0, this.pos));
             }
 
@@ -54,22 +55,22 @@ class Valvula
 
         if (this.type == "pressio") 
         {
-            if (this.pressio[3] == -1) {
-                stroke(50, 255);
-                drawSetWeight(this.iconSize == undefined? 1. : 2.);
-            }
-            else {
-                colorStrokePressio(this.pressio[3])
-                drawSetWeight(2);
-            }
-            line(-2, 0, 0, 0);
-            
             if (this.pressio[4] == -1) {
                 stroke(50, 255);
                 drawSetWeight(this.iconSize == undefined? 1. : 2.);
             }
             else {
                 colorStrokePressio(this.pressio[4])
+                drawSetWeight(2);
+            }
+            line(-2, 0, 0, 0);
+            
+            if (this.pressio[5] == -1) {
+                stroke(50, 255);
+                drawSetWeight(this.iconSize == undefined? 1. : 2.);
+            }
+            else {
+                colorStrokePressio(this.pressio[5])
                 drawSetWeight(2);
             }
             line(3, 0, 0, 0);
@@ -84,18 +85,18 @@ class Valvula
                 {
                     mouseIsPressed = false;
                     if (mouseIsReleased) {
-                        this.pressio[3] = 3 - this.pressio[3];
+                        this.pressio[4] = 3 - this.pressio[4];
                         mouseIsReleased = false;
                     }
                 }
             //interuptor
             beginShape();
-            vertex(this.pressio[3] < 1? -2.5 : -2.75, -.3);
+            vertex(this.pressio[4] < 1? -2.5 : -2.75, -.3);
             vertex(0, -.3);
             vertex(0, .3);
-            vertex(this.pressio[3] < 1? -2.7 : -2.6, .3);
+            vertex(this.pressio[4] < 1? -2.7 : -2.6, .3);
             endShape();
-            if(this.pressio[3] < 1) {
+            if(this.pressio[4] < 1) {
                 line(-2.5, -0.3, -2.8, .55);
                 ellipse(-2.45, -0.45, 0.35, .35);
             }
@@ -104,23 +105,26 @@ class Valvula
                 ellipse(-2.85, -0.42, 0.35, 0.35);
             }
 
-            drawMotlla(2, this.pos, 3.4,  -.5,  .5);
+            drawMotlla(2, this.pos, 3.8,  -.5,  .5);
         }
 
         drawSetWeight(1);
         stroke(0, 200);
         fill(255);
         translate(this.pos*-2, 0);
-        rect(-0.2, -1, 3.4, 2);
+        rect(-0.3, -1, 3.8, 2);
 
         ////
 
-        drawTope(0, 1);
-        drawTope(3, 1);
+        //drawTope(0, 1);
+        //drawTope(3, 1);
         line(1.5, -1, 1.5, 1);
         
         drawArrow(0, -1, 1, 1);
+        drawArrow(1, -1, 0, 1);
+
         drawArrow(2, 1, 2, -1);
+        drawArrow(3, -1, 3, 1);
 
         pop();
     }
@@ -130,15 +134,30 @@ class Valvula
         if (this.pressio[0] != -1)
         {
             if (this.pos > 0.5) {
-                if (this.pressio[1] != -1 && this.pressio[0] < this.pressio[1]) {
-                    let p = (this.pressio[0] + this.pressio[1]) / 2.;
+                if (this.pressio[2] != -1 && this.pressio[0] < this.pressio[2]) {
+                    let p = (this.pressio[0] + this.pressio[2]) / 2.;
                     this.wires[0].setPressio(p);
-                    this.wires[1].setPressio(p);
+                    this.wires[2].setPressio(p);
                 }
             }
-            else if (this.pressio[2] != -1 && this.pressio[0] > this.pressio[3]) {
-                let p = (this.pressio[0] + this.pressio[2]) / 2.;
+            else if (this.pressio[3] != -1 && this.pressio[0] > this.pressio[3]) {
+                let p = (this.pressio[0] + this.pressio[3]) / 2.;
                 this.wires[0].setPressio(p);
+                this.wires[3].setPressio(p);
+            }
+        }
+        if (this.pressio[1] != -1)
+        {
+            if (this.pos > 0.5) {
+                if (this.pressio[3] != -1 && this.pressio[1] > this.pressio[3]) {
+                    let p = (this.pressio[1] + this.pressio[3]) / 2.;
+                    this.wires[1].setPressio(p);
+                    this.wires[3].setPressio(p);
+                }
+            }
+            else if (this.pressio[2] != -1 && this.pressio[1] > this.pressio[2]) {
+                let p = (this.pressio[1] + this.pressio[2]) / 2.;
+                this.wires[1].setPressio(p);
                 this.wires[2].setPressio(p);
             }
         }
