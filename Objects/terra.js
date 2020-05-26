@@ -31,7 +31,7 @@ class Terra
     }
 
     updateBeforePressio() {
-        this.wire.setPressio(0);
+        this.wire.setPressio(minimaPressio);
     }
     updateAfterPressio() {}
 

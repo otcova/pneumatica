@@ -153,7 +153,7 @@ function keyPressed()
         }
     }
     
-   ["remove", "wire", "font", "terra", "cilindre", "v reg", "v 3/2", "v 3/2 p"].forEach(function (nom, index)
+   ["remove", "wire", "font", "terra", "cilindre", "v reg", "v 3/2", "v 3/2 p", "v 4/2", "v 4/2 p"].forEach(function (nom, index)
     {
         if (key == "" + (1+index))
         {

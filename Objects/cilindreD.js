@@ -7,8 +7,8 @@ class Cilindre
         this.angle = angle;
 
         this.pos = 1;
-        this.pressioA = 0;
-        this.pressioB = 0;
+        this.pressioA = minimaPressio;
+        this.pressioB = minimaPressio;
         
         if (iconSize != undefined)
         {
