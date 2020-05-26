@@ -136,7 +136,7 @@ class Valvula
                     this.wires[1].setPressio(p);
                 }
             }
-            else if (this.pressio[2] != -1 && this.pressio[0] > this.pressio[3]) {
+            else if (this.pressio[2] != -1 && this.pressio[0] > this.pressio[2]) {
                 let p = (this.pressio[0] + this.pressio[2]) / 2.;
                 this.wires[0].setPressio(p);
                 this.wires[2].setPressio(p);
