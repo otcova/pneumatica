@@ -95,7 +95,7 @@ function updateGUI()
 
     textAlign(CENTER, CENTER);
 
-    ["font", "cilindre", "-valvules", "terra", "v reg", "v 3/2", "v 3/2 p", "v 4/2", "v 4/2 p", "- provisional"].forEach(function(nom, index) {
+    ["font", "cilindre", "-valvules", "terra", "v reg", "v 3/2", "v 3/2 p", "v 4/2", "v 4/2 p", "- exemples"].forEach(function(nom, index) {
         if (nom[0] == '-')
         {
             noStroke();
